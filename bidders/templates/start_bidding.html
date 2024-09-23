@@ -85,7 +85,7 @@
                                     <div class="card-body">
                                         <div class="row justify-content-between">
                                             <div class="col-4">
-                                            <p class="card-text">{{ good }}</p>
+                                            <p class="card-text">good</p>
                                             </div>
                                             <div class="col-4">
                                             <p class="card-text">{{ auction_state["price"] }} €</p>
@@ -138,7 +138,7 @@
                                     <img class="bd-placeholder-img card-img" width="50%" height="50%" src="data:image/png;base64,{{ goods_image[good]['good_image'] }}" />
                                     <!-- <svg class="bd-placeholder-img card-img-top" width="50%" height="50%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
                                     <div class="card-body">
-                                        <p class="card-text">Good</p>
+                                        <p class="card-text">{{ good }}</p>
                                         <div class="d-flex justify-content-between align-items-center">
                                           <div class="input-group mb-3">
                                             <!-- <label class="form-check-label" for="flexSwitchCheckDefault">Montant</label> -->
@@ -206,7 +206,7 @@
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
 <script type="text/javascript">
-    var socket_bidder = io.connect('http://localhost:38400');
+    var socket_bidder = io.connect('https://agape-bidder.onrender.com');
     socket_bidder.on('reload', function(msg) {
         location.reload();
     });
@@ -230,33 +230,6 @@
     });
 
       // Initial budget (you can set a starting budget here if needed)
-    let currentBudget = parseFloat("{{ budgets[agent_id] - paid[agent_id] }}");
-
-    // Update budget display function
-    function updateBudgetDisplay() {
-        document.getElementById('budget').textContent = currentBudget;
-    }
-
-    // Function to handle checkbox change
-    function handleCheckboxChange(event) {
-        if (event.target.checked) {
-        // Subtract 50€ if checked
-        currentBudget -= parseFloat("{{ auction_state['price'] }}");
-        } else {
-        // Add 50€ if unchecked
-        currentBudget += parseFloat("{{ auction_state['price'] }}");
-        }
-        // Update the displayed budget
-        updateBudgetDisplay();
-    }
-
-    // Add event listeners to all checkboxes
-    document.querySelectorAll('.form-check-input').forEach((checkbox) => {
-        checkbox.addEventListener('change', handleCheckboxChange);
-    });
-
-    // Initialize the display with the starting budget
-    updateBudgetDisplay();
 
     /*$('#sa-bid-form').on('submit', function(event) {
         event.preventDefault();

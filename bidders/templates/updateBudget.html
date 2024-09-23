@@ -1,0 +1,27 @@
+/*let currentBudget = parseFloat("{{ budgets[agent_id] - paid[agent_id] }}");
+
+// Update budget display function
+function updateBudgetDisplay() {
+    document.getElementById('budget').textContent = currentBudget;
+}
+
+// Function to handle checkbox change
+function handleCheckboxChange(event) {
+    if (event.target.checked) {
+    // Subtract 50€ if checked
+    currentBudget -= parseFloat("{{ auction_state['price'] }}");
+    } else {
+    // Add 50€ if unchecked
+    currentBudget += parseFloat("{{ auction_state['price'] }}");
+    }
+    // Update the displayed budget
+    updateBudgetDisplay();
+}
+
+// Add event listeners to all checkboxes
+document.querySelectorAll('.form-check-input').forEach((checkbox) => {
+    checkbox.addEventListener('change', handleCheckboxChange);
+});
+
+// Initialize the display with the starting budget
+updateBudgetDisplay();*/
