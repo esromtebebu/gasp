@@ -85,7 +85,7 @@
                                     <div class="card-body">
                                         <div class="row justify-content-between">
                                             <div class="col-4">
-                                            <p class="card-text">good</p>
+                                            <p class="card-text">{{ good }}</p>
                                             </div>
                                             <div class="col-4">
                                             <p class="card-text">{{ auction_state["price"] }} €</p>
@@ -143,7 +143,7 @@
                                           <div class="input-group mb-3">
                                             <!-- <label class="form-check-label" for="flexSwitchCheckDefault">Montant</label> -->
                                             <span class="input-group-text">€</span>
-                                            <input class="form-control" type="number" role="switch" id="{{ good }}_price" value="0">
+                                            <input class="form-control" type="number" id="{{ good }}_price" value="0">
                                           </div>
                                         </div>
                                     </div>
@@ -206,7 +206,7 @@
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
 <script type="text/javascript">
-    var socket_bidder = io.connect('https://agape-bidder.onrender.com');
+    var socket_bidder = io.connect('http://localhost:38400');
     socket_bidder.on('reload', function(msg) {
         location.reload();
     });
@@ -228,8 +228,6 @@
         // Optional: Clear the form after submission
         //$(this).find('input[type="checkbox"]').prop('checked', false);
     });
-
-      // Initial budget (you can set a starting budget here if needed)
 
     /*$('#sa-bid-form').on('submit', function(event) {
         event.preventDefault();
