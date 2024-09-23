@@ -1,0 +1,286 @@
+{% extends "base.html"%}
+{% block content %}
+{% if state[agent_id] %}
+    <!-- {{ message }} 
+    <br /> -->
+    {% if state[agent_id] == 'start' %}
+        <h1>La compétition a démarré !</h1>
+        <!-- {{ start_message[agent_id] }} -->
+    {% elif state[agent_id] == 'bid_request' %}
+        <!-- {{ bid_request[agent_id] }} -->
+        <!-- <h1>Les biens à vendre sont : {{ still_to_sell }}</h1> -->
+        <br/>
+        <!-- {% for i in goods_image %}
+            <img src="data:image/png;base64,{{ i['good_image'] }}" />
+        {% endfor %} -->
+        <div class="container">
+            <div>
+                <h1 id="budget" class="h3 mb-3 fw-normal float-end">Budget : {{ budgets[agent_id] - paid[agent_id] }}</h1>
+                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Valuation privée</button>
+            </div>
+            <div>
+            <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+                <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Vos valuations</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                <!-- <p>{{ valuation[agent_id]}}</p> -->
+                 <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Bien</th>
+                            <th scope="col">Prix (en €)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in valuation[agent_id]['child_nodes'] %}
+                        {% if i['node'] == 'leaf' %}
+                            <tr>
+                                <td>{{ i['good'] }}</td>
+                                <td>{{ i['value'] }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                 </table>
+                 <br/>
+                 <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Panier</th>
+                            <th scope="col">Prix (en €)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in valuation[agent_id]['child_nodes'] %}
+                        {% if i['node'] == 'ic' %}
+                            <tr>
+                                <td>
+                                    {% for j in i['child_nodes'] %}
+                                        {{ j['good'] }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </td>                                
+                                <td>{{ i['value'] }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                 </table>
+                </div>
+            </div>
+        </div>
+        {% if mechanism == 'SAA' or mechanism == 'SDA' %}
+            <!-- <h1>Le prix des bien est de {{ auction_state["price"] }} €.</h1> -->
+            <form id="sa-bid-form" method='POST'>
+                <div class="album py-5 bg-body-tertiary">
+                    <div class="container">
+                
+                        <div class="row justify-content-evenly">
+                            {% for good in still_to_sell %}
+                                <div class="col-3">
+                                    <div class="card shadow-sm">
+                                    <img class="bd-placeholder-img card-img" width="50%" height="50%" src="data:image/png;base64,{{ goods_image[good]['good_image'] }}" />
+                                    <!-- <svg class="bd-placeholder-img card-img-top" width="50%" height="50%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
+                                    <div class="card-body">
+                                        <div class="row justify-content-between">
+                                            <div class="col-4">
+                                            <p class="card-text">{{ good }}</p>
+                                            </div>
+                                            <div class="col-4">
+                                            <p class="card-text">{{ auction_state["price"] }} €</p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="{{ good }}_check">
+                                            <label class="form-check-label" for="{{ good }}_check">Choisir</label>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="position-relative">
+                    <button class="btn btn-primary w-25 py-2 position-absolute top-100 start-50 translate-middle" type="submit">Soummettre</button>
+                </div>
+            </form>
+            <!-- <form id="sa-bid-form" method='POST'>
+                        <label for="sa-bid-select">Choose goods:</label>
+                        <select name="sa-bid" id="sa-bid-select" multiple>
+                            <option value="noop">--Please choose an option--</option>
+                            {% for good in still_to_sell %}
+                            <option value="{{good}}">{{good}}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="Bid"/>
+            </form> -->
+
+        {% else %}
+            <!-- <form id="sba-bid-form" method="POST">
+                {% for good in goods %}
+                    <label for="{{good}}_price">{{ good }}</label>
+                    <input id="{{ good }}_price" type="number" placeholder="Entrez votre valuer. Ex : 100" value="0"/>
+                {% endfor %}
+                <input type="submit" value="Bid"/>
+            </form> -->
+            <form id="sba-bid-form" method='POST'>
+                <div class="album py-5 bg-body-tertiary">
+                    <div class="container">
+                
+                        <div class="row justify-content-evenly">
+                            {% for good in goods %}
+                                <div class="col-3">
+                                    <div class="card shadow-sm">
+                                    <img class="bd-placeholder-img card-img" width="50%" height="50%" src="data:image/png;base64,{{ goods_image[good]['good_image'] }}" />
+                                    <!-- <svg class="bd-placeholder-img card-img-top" width="50%" height="50%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
+                                    <div class="card-body">
+                                        <p class="card-text">Good</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                          <div class="input-group mb-3">
+                                            <!-- <label class="form-check-label" for="flexSwitchCheckDefault">Montant</label> -->
+                                            <span class="input-group-text">€</span>
+                                            <input class="form-control" type="number" role="switch" id="{{ good }}_price" value="0">
+                                          </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="position-relative">
+                    <button class="btn btn-primary w-25 py-2 position-absolute top-100 start-50 translate-middle" type="submit">Soummettre</button>
+                </div>
+            </form>
+        {% endif %}
+    {% elif state[agent_id] == 'bid_submitted' %}
+        {% if mechanism == 'SAA' or mechanism == 'SDA' %}
+            {% if bid_msg[agent_id] != [] %}
+                <p class="lead text-center">Vous avez soumis des offres pour : </p>
+                <ul class="list-group">
+                    {% for good in bid_msg[agent_id] %}
+                    <li class="list-group-item">{{ good }}</li>
+                    {% endfor %}
+                  </ul>
+            {% else %}
+                  <p class="lead text-center">Vous n'avez pas soumis une offre.</p>
+            {% endif %}
+        {% else %}
+        <p class="lead text-center">Vous avez soumis des offres pour : </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                      <th scope="col">Bien</th>
+                      <th scope="col">Prix (en €)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for good in bid_msg[agent_id] %}
+                    <tr>
+                        <td>{{good}}</td>
+                        <td>{{bid_msg[agent_id][good]}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        <br/>
+        <p class="text-center">En attente de la prochaine étape...</p>
+    {% elif state[agent_id] == 'stop' %}  
+        <p class="lead text-center">L'enchère est terminée !</p>
+        <!-- {{ stop_message[agent_id] }} -->
+    {% elif state[agent_id] == 'abort' %}
+        <p class="lead text-center">L'enchère a été arrêtée !</p>
+        <!-- {{ abort_message[agent_id] }} -->
+    {% else %}
+        <h1>Erreure</h1>
+    {% endif %}
+{% else %}
+    <p class="lead text-center">En attente du lancement de l'enchère</p>
+{% endif %}
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    var socket_bidder = io.connect('http://localhost:38400');
+    socket_bidder.on('reload', function(msg) {
+        location.reload();
+    });
+
+    $('#sa-bid-form').on('submit', function(event) {
+        event.preventDefault();
+        let goods_raw = "{{ still_to_sell }}";
+        var goods = JSON.parse(goods_raw.replace(/&#39;/g, '"'));
+        let selectedGoods = [];
+        for (let i = 0; i < goods.length; i++) {
+            if ($(`#${goods[i]}_check`).is(':checked')) {
+                selectedGoods.push(goods[i]);  // Push the selected good to the array
+            }
+        }
+    
+        console.log(selectedGoods);
+        socket_bidder.emit('bid_msg', {'{{agent_id}}': selectedGoods, 'competition_id': '{{message["competition_id"]}}'});
+    
+        // Optional: Clear the form after submission
+        //$(this).find('input[type="checkbox"]').prop('checked', false);
+    });
+
+      // Initial budget (you can set a starting budget here if needed)
+    let currentBudget = parseFloat("{{ budgets[agent_id] - paid[agent_id] }}");
+
+    // Update budget display function
+    function updateBudgetDisplay() {
+        document.getElementById('budget').textContent = currentBudget;
+    }
+
+    // Function to handle checkbox change
+    function handleCheckboxChange(event) {
+        if (event.target.checked) {
+        // Subtract 50€ if checked
+        currentBudget -= parseFloat("{{ auction_state['price'] }}");
+        } else {
+        // Add 50€ if unchecked
+        currentBudget += parseFloat("{{ auction_state['price'] }}");
+        }
+        // Update the displayed budget
+        updateBudgetDisplay();
+    }
+
+    // Add event listeners to all checkboxes
+    document.querySelectorAll('.form-check-input').forEach((checkbox) => {
+        checkbox.addEventListener('change', handleCheckboxChange);
+    });
+
+    // Initialize the display with the starting budget
+    updateBudgetDisplay();
+
+    /*$('#sa-bid-form').on('submit', function(event) {
+        event.preventDefault();
+        let selectedGoods = [];
+        selectedGoods = $('#sa-bid-select').val();
+
+        let sendBids = selectedGoods.includes("noop") ? [] : selectedGoods;
+
+        socket_bidder.emit('bid_msg', {
+            '{{agent_id}}': sendBids,
+            competition_id: '{{message["competition_id"]}}',
+            bids: sendBids
+        });
+    });*/
+    $('#sba-bid-form').on('submit', function(event) {
+        event.preventDefault();
+        let goods_raw = "{{ goods }}";
+        var goods = JSON.parse(goods_raw.replace(/&#39;/g, '"'));
+        let selectedGoods = {};
+        for (let i = 0; i < goods.length; i++) {
+            selectedGoods[goods[i]] = parseInt($(`#${goods[i]}_price`).val())
+        };
+        console.log(selectedGoods);
+        socket_bidder.emit('bid_msg', {'{{agent_id}}': selectedGoods, 'competition_id': '{{message["competition_id"]}}'});
+    });
+</script>
+{% endblock %}

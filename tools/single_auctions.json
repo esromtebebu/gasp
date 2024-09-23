@@ -1,0 +1,531 @@
+[
+    {
+        "competition_id": "saa",
+        "title": "Simultaneous Ascending Auction (S)",
+        "description": "lorem ipsum",
+        "starts": "2021-10-25T18:25:43.511Z",
+        "response_clock": 30,
+        "agents": [
+            {
+                "id": "agent1",
+                "agent_type": "artificial_risk_averse",
+                "url": "http://localhost:8000/agent1",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 8,
+                            "units": 1,
+                            "good": "Good1"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 6,
+                            "units": 1,
+                            "good": "Good2"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 15,
+                            "units": 1,
+                            "good": "Good3"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 12,
+                            "units": 1,
+                            "good": "Good4"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Good1": 0,
+                    "Good2": 0,
+                    "Good3": 0,
+                    "Good4": 0
+                },
+                "budget": 44
+            },
+            {
+                "id": "agent2",
+                "agent_type": "artificial_internal_based_strategy",
+                "url": "http://localhost:8000/agent2",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 3,
+                            "units": 1,
+                            "good": "Good1"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 22,
+                            "units": 1,
+                            "good": "Good2"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 6,
+                            "units": 1,
+                            "good": "Good3"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 7,
+                            "units": 1,
+                            "good": "Good4"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Good1": 0,
+                    "Good2": 0,
+                    "Good3": 0,
+                    "Good4": 0
+                },
+                "budget": 34
+            }
+        ],
+        "bid_clock": 30,
+        "mechanism": "SAA",
+        "start_price": 3,
+        "increment": 2,
+        "auction_type": "single",
+        "goods": ["Good1", "Good2", "Good3", "Good4"]
+    },
+    {
+        "competition_id": "sda",
+        "title": "Simultaneous Descending Auction (S)",
+        "description": "lorem ipsum",
+        "starts": "2021-10-25T18:25:43.511Z",
+        "response_clock": 30,
+        "agents": [
+            {
+                "id": "agent1",
+                "agent_type": "artificial_risk_averse",
+                "url": "http://localhost:8000/agent1",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 8,
+                            "units": 1,
+                            "good": "Good1"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 6,
+                            "units": 1,
+                            "good": "Good2"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 15,
+                            "units": 1,
+                            "good": "Good3"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 12,
+                            "units": 1,
+                            "good": "Good4"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Good1": 0,
+                    "Good2": 0,
+                    "Good3": 0,
+                    "Good4": 0
+                },
+                "budget": 44
+            },
+            {
+                "id": "agent2",
+                "agent_type": "artificial_internal_based_strategy",
+                "url": "http://localhost:8000/agent2",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 3,
+                            "units": 1,
+                            "good": "Good1"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 22,
+                            "units": 1,
+                            "good": "Good2"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 6,
+                            "units": 1,
+                            "good": "Good3"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 7,
+                            "units": 1,
+                            "good": "Good4"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Good1": 0,
+                    "Good2": 0,
+                    "Good3": 0,
+                    "Good4": 0
+                },
+                "budget": 34
+            }
+        ],
+        "bid_clock": 30,
+        "mechanism": "SDA",
+        "start_price": 15,
+        "increment": -2,
+        "auction_type": "single",
+        "goods": ["Good1", "Good2", "Good3", "Good4"]
+    },    
+    {
+        "competition_id": "ssba1",
+        "title": "Simultaneous Sealed Bid Auction I (S)",
+        "description": "lorem ipsum",
+        "starts": "2021-10-25T18:25:43.511Z",
+        "response_clock": 30,
+        "agents": [
+            {
+                "id": "agent1",
+                "agent_type": "artificial_risk_averse",
+                "url": "http://localhost:8000/agent1",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 8,
+                            "units": 1,
+                            "good": "Good1"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 6,
+                            "units": 1,
+                            "good": "Good2"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 15,
+                            "units": 1,
+                            "good": "Good3"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 12,
+                            "units": 1,
+                            "good": "Good4"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Good1": 0,
+                    "Good2": 0,
+                    "Good3": 0,
+                    "Good4": 0
+                },
+                "budget": 44
+            },
+            {
+                "id": "agent2",
+                "agent_type": "artificial_internal_based_strategy",
+                "url": "http://localhost:8000/agent2",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 3,
+                            "units": 1,
+                            "good": "Good1"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 22,
+                            "units": 1,
+                            "good": "Good2"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 6,
+                            "units": 1,
+                            "good": "Good3"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 7,
+                            "units": 1,
+                            "good": "Good4"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Good1": 0,
+                    "Good2": 0,
+                    "Good3": 0,
+                    "Good4": 0
+                },
+                "budget": 34
+            }
+        ],
+        "bid_clock": 30,
+        "mechanism": "SSBA1",
+        "auction_type": "single",
+        "goods": ["Good1", "Good2", "Good3", "Good4"]
+    },
+    {
+        "competition_id": "ssba2",
+        "title": "Simultaneous Sealed Bid Auction II (S)",
+        "description": "lorem ipsum",
+        "starts": "2021-10-25T18:25:43.511Z",
+        "response_clock": 30,
+        "agents": [
+            {
+                "id": "agent1",
+                "agent_type": "artificial_risk_averse",
+                "url": "http://localhost:8000/agent1",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 8,
+                            "units": 1,
+                            "good": "Good1"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 6,
+                            "units": 1,
+                            "good": "Good2"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 15,
+                            "units": 1,
+                            "good": "Good3"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 12,
+                            "units": 1,
+                            "good": "Good4"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Good1": 0,
+                    "Good2": 0,
+                    "Good3": 0,
+                    "Good4": 0
+                },
+                "budget": 44
+            },
+            {
+                "id": "agent2",
+                "agent_type": "artificial_internal_based_strategy",
+                "url": "http://localhost:8000/agent2",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 3,
+                            "units": 1,
+                            "good": "Good1"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 22,
+                            "units": 1,
+                            "good": "Good2"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 6,
+                            "units": 1,
+                            "good": "Good3"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 7,
+                            "units": 1,
+                            "good": "Good4"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Good1": 0,
+                    "Good2": 0,
+                    "Good3": 0,
+                    "Good4": 0
+                },
+                "budget": 34
+            }
+        ],
+        "bid_clock": 30,
+        "mechanism": "SSBA2",
+        "auction_type": "single",
+        "goods": ["Good1", "Good2", "Good3", "Good4"]
+    },
+    {
+        "competition_id": "ssba3",
+        "title": "Simultaneous Sealed Bid Auction III (S)",
+        "description": "lorem ipsum",
+        "starts": "2021-10-25T18:25:43.511Z",
+        "response_clock": 30,
+        "agents": [
+            {
+                "id": "agent1",
+                "agent_type": "artificial_risk_averse",
+                "url": "http://localhost:8000/agent1",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 8,
+                            "units": 1,
+                            "good": "Good1"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 6,
+                            "units": 1,
+                            "good": "Good2"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 15,
+                            "units": 1,
+                            "good": "Good3"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 12,
+                            "units": 1,
+                            "good": "Good4"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Good1": 0,
+                    "Good2": 0,
+                    "Good3": 0,
+                    "Good4": 0
+                },
+                "budget": 44
+            },
+            {
+                "id": "agent2",
+                "agent_type": "artificial_internal_based_strategy",
+                "url": "http://localhost:8000/agent2",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 3,
+                            "units": 1,
+                            "good": "Good1"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 22,
+                            "units": 1,
+                            "good": "Good2"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 6,
+                            "units": 1,
+                            "good": "Good3"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 7,
+                            "units": 1,
+                            "good": "Good4"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Good1": 0,
+                    "Good2": 0,
+                    "Good3": 0,
+                    "Good4": 0
+                },
+                "budget": 34
+            }
+        ],
+        "bid_clock": 30,
+        "mechanism": "SSBA3",
+        "auction_type": "single",
+        "goods": ["Good1", "Good2", "Good3", "Good4"]
+    }  
+]

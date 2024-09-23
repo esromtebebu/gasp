@@ -1,0 +1,15 @@
+{% extends "base.html"%}
+{% block content %}
+<div class="jumbotron">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{form.auction_type.label}}{{form.auction_type}}
+        <br />
+        {{ form.submit() }}
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+<script type="text/javascript">
+</script>
+{% endblock %}

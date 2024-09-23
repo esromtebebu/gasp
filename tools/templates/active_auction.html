@@ -1,0 +1,67 @@
+{% extends "base.html"%}
+{% block content %}
+<div class="jumbotron">
+    {% if message['message_type'] != 'start' %}
+        {{ message }}
+        {% if auction_state['terminated'] == False %}
+            <h1>Ongoing auction</h1>
+            {% for i in goods_image %}
+                <img src="data:image/png;base64,{{ i['good_image'] }}" alt="{{ i['good_name'] }}" />
+            {% endfor %}
+            <form id="force-ready" method="POST">
+                <input type="submit" value="Next state"/>
+            </form>
+        {% else %}
+            <h1>Competition ended</h1>
+            {% if len_active_auctions > 1 and sequential %}
+                <form id="goto-preliminary" method="POST">
+                    <input type="submit" value="Preliminary Results"/>
+                </form>
+            {% else %}
+                <form id="goto-final" method="POST">
+                    <input type="submit" value="Final Results"/>
+                </form>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <h1>Competition started...</h1>
+    {% endif %}
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    var socket_manager = io.connect('http://localhost:9000');
+
+    socket_manager.on('reload', function(msg) {
+        location.reload();
+    });
+
+    socket_manager.on('redirect', function(data) {
+        window.location.href = data.url;
+    });
+
+    $('#force-ready').on('submit', function(event) {
+        event.preventDefault();
+        socket_manager.emit('force_ready', 'force_ready');
+    });
+
+    $('#next-auction').on('submit', function(event) {
+        event.preventDefault();
+        socket_manager.emit('next_auction', 'next_auction');
+    });
+
+    $('#back-to-home').on('submit', function(event) {
+        event.preventDefault();
+        socket_manager.emit('back_to_home', 'back_to_home');
+    });
+
+    $('#goto-preliminary').on('submit', function(event) {
+        event.preventDefault();
+        window.location.href = 'http://localhost:9000/' + 'preliminary-results';
+    });
+
+    $('#goto-final').on('submit', function(event) {
+        event.preventDefault();
+        window.location.href = 'http://localhost:9000/' + 'final-results';
+    });
+</script>
+{% endblock %}

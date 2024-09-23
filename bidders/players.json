@@ -1,0 +1,707 @@
+[
+    {
+        "competition_id": "saa",
+        "title": "La Lune et la planète joviane : enchère à l'anglaise",
+        "description": "lorem ipsum",
+        "starts": "2021-10-25T18:25:43.511Z",
+        "response_clock": 30,
+        "agents": [
+            {
+                "agent_type": "human",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 2,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 60,
+                            "units": 1,
+                            "good": "Lune"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 40,
+                            "units": 1,
+                            "good": "Pluto"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Lune": 0,
+                    "Pluto": 0
+                },
+                "budget": 50
+            },
+            {
+                "agent_type": "human",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 2,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 40,
+                            "units": 1,
+                            "good": "Lune"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 60,
+                            "units": 1,
+                            "good": "Pluto"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Lune": 0,
+                    "Pluto": 0
+                },
+                "budget": 50
+            }
+        ],
+        "bid_clock": 30,
+        "mechanism": "SAA",
+        "start_price": 30,
+        "increment": 5,
+        "auction_type": "single",
+        "goods": ["Lune", "Pluto"]
+    },
+    {
+        "competition_id": "sda",
+        "title": "Les planètes gazeuses : enchère à l'hollandaise",
+        "description": "lorem ipsum",
+        "starts": "2021-10-25T18:25:43.511Z",
+        "response_clock": 30,
+        "agents": [
+            {
+                "agent_type": "human",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 8,
+                            "units": 1,
+                            "good": "Jupiter"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 20,
+                            "units": 1,
+                            "good": "Saturne"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 44,
+                            "units": 1,
+                            "good": "Uranus"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 38,
+                            "units": 1,
+                            "good": "Neptune"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Jupiter": 0,
+                    "Saturne": 0,
+                    "Uranus": 0,        
+                    "Neptune": 0
+                },
+                "budget": 100
+            },
+            {
+                "agent_type": "human",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 20,
+                            "units": 1,
+                            "good": "Jupiter"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 27,
+                            "units": 1,
+                            "good": "Saturne"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 39,
+                            "units": 1,
+                            "good": "Uranus"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 31,
+                            "units": 1,
+                            "good": "Neptune"
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Jupiter": 0,
+                    "Saturne": 0,
+                    "Uranus": 0,
+                    "Neptune": 0
+                },
+                "budget": 100
+            }
+        ],
+        "bid_clock": 30,
+        "mechanism": "SDA",
+        "start_price": 50,
+        "increment": -5,
+        "auction_type": "single",
+        "goods": ["Jupiter", "Saturne", "Uranus", "Neptune"]
+    },
+    {
+        "competition_id": "ssba2",
+        "title": "Les planètes rocheuses : enchère sous pli cacheté à premier prix avec paniers",
+        "description": "lorem ipsum",
+        "starts": "2021-10-25T18:25:43.511Z",
+        "response_clock": 30,
+        "agents": [
+            {
+                "agent_type": "human",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 8,
+                            "units": 1,
+                            "good": "Mercure"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 20,
+                            "units": 1,
+                            "good": "Vénus"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 44,
+                            "units": 1,
+                            "good": "Terre"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 38,
+                            "units": 1,
+                            "good": "Mars"
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 2,
+                            "max": 2,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 44,
+                                    "units": 1,
+                                    "good": "Terre"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 38,
+                                    "units": 1,
+                                    "good": "Mars"
+                                }
+                            ]
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 2,
+                            "max": 2,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 8,
+                                    "units": 1,
+                                    "good": "Vénus"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 20,
+                                    "units": 1,
+                                    "good": "Mercure"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Mercure": 0,
+                    "Vénus": 0,
+                    "Terre": 0,        
+                    "Mars": 0
+                },
+                "budget": 100
+            },
+            {
+                "agent_type": "human",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 4,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 20,
+                            "units": 1,
+                            "good": "Mercure"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 27,
+                            "units": 1,
+                            "good": "Vénus"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 39,
+                            "units": 1,
+                            "good": "Terre"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 31,
+                            "units": 1,
+                            "good": "Mars"
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 2,
+                            "max": 2,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 20,
+                                    "units": 1,
+                                    "good": "Mercure"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 27,
+                                    "units": 1,
+                                    "good": "Vénus"
+                                }
+                            ]
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 2,
+                            "max": 2,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 39,
+                                    "units": 1,
+                                    "good": "Terre"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 31,
+                                    "units": 1,
+                                    "good": "Mars"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Mercure": 0,
+                    "Vénus": 0,
+                    "Terre": 0,
+                    "Mars": 0
+                },
+                "budget": 100
+            }
+        ],
+        "bid_clock": 30,
+        "mechanism": "SSBA2",
+        "auction_type": "single",
+        "goods": ["Mercure", "Vénus", "Terre", "Mars"]
+    },
+    {
+        "competition_id": "sda",
+        "title": "Enchères séquentielles : enchère à l'hollandaise",
+        "description": "Achat de trousse et cartables.",
+        "starts": "2021-10-25T18:25:43.511Z",
+        "response_clock": 30,
+        "agents": [
+            {
+                "agent_type": "human",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 2,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 50,
+                            "units": 1,
+                            "good": "Cartable"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 15,
+                            "units": 1,
+                            "good": "Trousse"
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 2,
+                            "max": 2,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 50,
+                                    "units": 1,
+                                    "good": "Cartable"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 25,
+                                    "units": 1,
+                                    "good": "Livres"
+                                }
+                            ]
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 3,
+                            "max": 3,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 15,
+                                    "units": 1,
+                                    "good": "Trousse"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 10,
+                                    "units": 1,
+                                    "good": "Stylos"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 10,
+                                    "units": 1,
+                                    "good": "Crayons"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Cartable": 0,
+                    "Trousse": 0
+                },
+                "budget": 100
+            },
+            {
+                "agent_type": "human",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 2,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 45,
+                            "units": 1,
+                            "good": "Cartable"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 13,
+                            "units": 1,
+                            "good": "Trousse"
+                        },
+                        {
+                            "node": "ic",
+                            "value": 12,
+                            "min": 2,
+                            "max": 2,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 45,
+                                    "units": 1,
+                                    "good": "Cartable"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 20,
+                                    "units": 1,
+                                    "good": "Manuels"
+                                }
+                            ]
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 3,
+                            "max": 3,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 13,
+                                    "units": 1,
+                                    "good": "Trousse"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 12,
+                                    "units": 1,
+                                    "good": "Stylos"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 9,
+                                    "units": 1,
+                                    "good": "Crayons"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Cartable": 0,
+                    "Trousse": 0
+                },
+                "budget": 100
+            }
+        ],
+        "bid_clock": 30,
+        "mechanism": "SDA",
+        "start_price": 50,
+        "increment": -5,
+        "auction_type": "sequential",
+        "goods": ["Cartable", "Trousse"]
+    },
+    {
+        "competition_id": "ssba3",
+        "title": "Enchères séquentielles : enchère sous pli cacheté à premier prix avec transparence parfaite",
+        "description": "lorem ipsum",
+        "starts": "2021-10-25T18:25:43.511Z",
+        "response_clock": 30,
+        "agents": [
+            {
+                "agent_type": "human",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 3,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 25,
+                            "units": 1,
+                            "good": "Manuels"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 10,
+                            "units": 1,
+                            "good": "Stylos"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 10,
+                            "units": 1,
+                            "good": "Crayons"
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 2,
+                            "max": 2,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 50,
+                                    "units": 1,
+                                    "good": "Cartable"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 25,
+                                    "units": 1,
+                                    "good": "Manuels"
+                                }
+                            ]
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 3,
+                            "max": 3,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 15,
+                                    "units": 1,
+                                    "good": "Trousse"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 10,
+                                    "units": 1,
+                                    "good": "Stylos"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 10,
+                                    "units": 1,
+                                    "good": "Crayons"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Manuels": 0,
+                    "Stylos": 0,
+                    "Crayons": 0
+                },
+                "budget": 100
+            },
+            {
+                "agent_type": "human",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 3,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 20,
+                            "units": 1,
+                            "good": "Manuels"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 12,
+                            "units": 1,
+                            "good": "Stylos"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 9,
+                            "units": 1,
+                            "good": "Crayons"
+                        },
+                        {
+                            "node": "ic",
+                            "value": 13,
+                            "min": 2,
+                            "max": 2,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 45,
+                                    "units": 1,
+                                    "good": "Cartable"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 20,
+                                    "units": 1,
+                                    "good": "Manuels"
+                                }
+                            ]
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 3,
+                            "max": 3,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 13,
+                                    "units": 1,
+                                    "good": "Trousse"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 12,
+                                    "units": 1,
+                                    "good": "Stylos"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 9,
+                                    "units": 1,
+                                    "good": "Crayons"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Manuels": 0,
+                    "Stylos": 0,
+                    "Crayons": 0
+                },
+                "budget": 100
+            }
+        ],
+        "bid_clock": 30,
+        "mechanism": "SSBA3",
+        "auction_type": "sequential",
+        "goods": ["Manuels", "Stylos", "Crayons"]
+    }
+]

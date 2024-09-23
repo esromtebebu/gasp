@@ -1,0 +1,76 @@
+{
+    "competition_id": "competition123",
+    "title": "lorem ipsum",
+    "description": "lorem ipsum",
+    "starts": "2021-10-25T18:25:43.511Z",
+    "response_clock": 10,
+    "bid_clock": 10,
+    "mechanism": "CE",
+    "start_price": 3,
+    "increment": 2,
+    "goods": ["Good1", "Good2", "Good3", "Good4"],
+    "agents": [
+        {
+            "id": "agent1",
+            "url": "http://localhost:38400/bidder1",
+            "valuation": {
+                "node": "ic",
+                "value": 7,
+                "min": 2,
+                "max": 2,
+                "child_nodes": [
+                    {
+                        "node": "leaf",
+                        "value": 8,
+                        "units": 3,
+                        "good": "Good1"
+                    },
+                    {
+                        "node": "leaf",
+                        "value": 6,
+                        "units": 5,
+                        "good": "Good2"
+                    }
+                ]
+            },
+            "allocation": {
+                "Good1": 3,
+                "Good2": 2,
+                "Good3": 0,
+                "Good4": 4
+            },
+            "budget": 44
+        },
+        {
+            "id": "agent2",
+            "url": "http://localhost:38400/bidder2",
+            "valuation": {
+                "node": "ic",
+                "value": 1,
+                "min": 1,
+                "max": 3,
+                "child_nodes": [
+                    {
+                        "node": "leaf",
+                        "value": -1,
+                        "units": -3,
+                        "good": "Good1"
+                    },
+                    {
+                        "node": "leaf",
+                        "value": -1,
+                        "units": -5,
+                        "good": "Good2"
+                    }
+]
+            },
+            "allocation": {
+                "Good1": 5,
+                "Good2": 8,
+                "Good3": 8,
+                "Good4": 3
+            },
+            "budget": 34
+        }
+    ]
+}

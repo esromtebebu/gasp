@@ -1,0 +1,129 @@
+{% extends "base.html"%}
+{% block content %}
+<!-- <div class="jumbotron">
+    <form id="bidder-form" method="POST">
+        <h1>Here is your competition data:</h1>
+        <h2>{{ agent_data[agent_id] }}</h2>
+        <input type="submit" value="Submit" />
+    </form>
+</div> -->
+<div class="container">
+    <h1 class="h3 mb-3 fw-normal">Veuillez prendre connaissances des compétitions auxquelles vous allez participer :</h1>
+</div>
+<div class="container">
+    <!-- Modal -->
+    <!-- {% for competition_id in agent_data[agent_id] %}
+        <div class="list-group w-100">
+            <button type="button" class="btn btn-primary w-100 py-2" data-bs-toggle="modal" data-bs-target="#modal-{{competition_id}}">
+                Découvrer vos valuations privées pour {{competition_id}}
+            </button>
+            <br/>
+        </div>
+        <div class="modal fade" id="modal-{{competition_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel-{{competition_id}}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalLabel-{{competition_id}}">{{competition_id}}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{agent_data[agent_id][competition_id]}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">J'ai compris</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %} -->
+    <div class="container form-signin w-50 m-auto">
+      <!-- Button trigger modal -->
+      {% for competition_id in agent_data[agent_id] %}
+        <div class="list-group w-100">
+            <button type="button" class="btn btn-primary w-100 py-2" data-bs-toggle="modal" data-bs-target="#modal-{{competition_id}}">
+                Découvrer vos valuations privées pour {{competition_id}}
+            </button>
+            <br/>
+        </div>
+        <div class="modal fade" id="modal-{{competition_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel-{{competition_id}}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalLabel-{{competition_id}}">{{competition_id}}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{agent_data[agent_id][competition_id]}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">J'ai compris</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+        <form id="bidder-form" method="POST">
+            <button class="btn btn-secondary w-100 py-2" type="submit">Valider</button>
+        </form>
+    </div>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    var socket_bidder = io.connect('http://localhost:38400');
+    var agents_data_raw = "{{ agent_data[agent_id] }}";
+    var agents_data_parsed = JSON.parse(agents_data_raw.replace(/&#39;/g, '"'));
+    socket_bidder.on('reload', function(msg) {
+        location.reload();
+    });
+    socket_bidder.on('redirect', function(data) {
+        window.location.href = data.url;
+    });
+    $('#bidder-form').on('submit', function(event) {
+        event.preventDefault();
+        socket_bidder.emit('bidder_join', {'agent_id': '{{ agent_id }}', 'data': agents_data_parsed});
+        const bidderURL = window.location.href;
+        window.location.href = bidderURL + "/" + "play";
+    });
+</script>
+{% endblock %}
+<!-- 
+
+{% for competition_id in agent_data[agent_id] %}
+        <div class="modal fade" id="{{competition_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel_{{competition_id}}">{{competition_id}}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{agent_data[agent_id][competition_id]}}
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">J'ai compris</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="container form-signin w-50 m-auto">
+
+
+      {% for competition_id in agent_data[agent_id] %}
+      <div class="list-group w-100">
+      <button type="button" class="btn btn-primary w-100 py-2" data-bs-toggle="modal" data-bs-target="#{{competition_id}}">
+          Découvrer vos valuations privées pour {{competition_id}}
+      </button>
+      <br/>
+      </div>
+  {% endfor %}
+
+        {% for competition_id in agent_data[agent_id] %}
+            <div class="list-group w-100">
+            <button type="button" class="btn btn-primary w-100 py-2" data-bs-toggle="modal" data-bs-target="#{{competition_id}}">
+                Découvrer vos valuations privées pour {{competition_id}}
+            </button>
+            <br/>
+            </div>
+        {% endfor %}
+ -->

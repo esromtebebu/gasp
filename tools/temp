@@ -1,0 +1,140 @@
+#!/usr/bin/python3
+
+import urllib.request, urllib.parse
+import requests
+import json
+import time
+from flask import Flask, render_template, session, redirect, url_for, jsonify, request
+from flask_wtf import FlaskForm
+from flask_cors import CORS
+from wtforms import SelectField, SubmitField, SelectMultipleField
+from wtforms.validators import DataRequired
+from flask_socketio import SocketIO, send, emit
+
+AUCTION_SERV_URL = "http://localhost:5000"
+PORT_NUMBER = 9000
+app = Flask(__name__)
+cors = CORS(app)
+# cors = CORS(app, resources={r'/': {'origins': f'http://localhost:80'}})
+app.config['SECRET_KEY'] = '*********'
+app.config['DEBUG'] = True
+socketio = SocketIO(app, cors_allowed_origins='*')
+
+server_msg = {}
+auction_state = {}
+next_competition = False
+results = {}
+
+with open('tools/auction_templates.json') as auctions_data:
+    auctions = json.load(auctions_data)
+    auction = [(auctions[i]['competition_id'], auctions[i]['title'])
+                for i in range(len(auctions))]
+
+class CreateAuctions(FlaskForm):
+    '''
+        Create one or multiple auctions.
+    '''
+    competitions = SelectMultipleField('Create one (or multiple) competition(s)',
+                              choices=[auction[i]
+                                       for i in range(len(auction))],
+                              validators=[DataRequired()])
+    submit = SubmitField('Launch Auction')
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    form = CreateAuctions()
+    # If the form is valid on submission
+    if form.validate_on_submit():
+        session['competitions'] = form.competitions.data
+        for competition in session['competitions']:
+            chosen_auction = json.dumps(
+                next((auctions[i] for i in range(len(auctions))
+                if auctions[i]['competition_id'] == competition))
+            )
+            req = urllib.request.Request(
+                f'{AUCTION_SERV_URL}/competitions',
+                headers={'Content-type': 'application/json'},
+                data=chosen_auction.encode('utf-8')
+            )        
+            res = urllib.request.urlopen(req)
+            msg = res.read().decode('utf-8')
+            print(msg)
+        return redirect(url_for('start_auction'))
+    return render_template('create_auctions.html', form=form)
+
+@app.route('/launch', methods=['GET', 'POST'])
+def start_auction():
+    global start_message
+    req = urllib.request.Request(f'{AUCTION_SERV_URL}/competitions', method='GET')
+    res = urllib.request.urlopen(req)
+    available_competitions = json.loads(res.read().decode('utf-8'))
+    competition = [(available_competitions[i]['competition_id'], available_competitions[i]['title'])
+                for i in range(len(available_competitions))]
+    class StartAuction(FlaskForm):
+        '''
+            Start auction.
+        '''
+        competition_id = SelectField('Start a competition',
+                                choices=[competition[i]
+                                        for i in range(len(competition))],
+                                validators=[DataRequired()])
+        submit = SubmitField('Start Auction')
+    form = StartAuction()
+    htmldoc = None
+    agent_ids = []
+    if request.method == 'POST':
+        agent_id = request.data.decode('utf-8')
+        print(agent_id)
+        agent_ids.append(agent_id)
+        socketio.emit('agent_id', agent_id)
+        # return f'{agent_id} successfully joined auction.'
+    if form.validate_on_submit():
+        session['competition_id'] = form.competition_id.data
+        req = urllib.request.Request(f'{AUCTION_SERV_URL}/{session["competition_id"]}/start', method='GET')
+        res = urllib.request.urlopen(req)
+        start_message = res.read().decode('utf-8')
+        print(htmldoc)
+        return redirect(url_for('active_auction', competition_id=session["competition_id"]))
+        # socketio.emit('redirect', {'url': url_for('active_auction', competition_id=competition_id)})
+    return render_template('start_auction.html', form=form, htmldoc=htmldoc, agent_ids=agent_ids)
+
+@app.route('/launch/<competition_id>', methods=['GET', 'POST', 'DELETE'])
+def active_auction(competition_id):
+    global server_msg, next_competition, auction_state
+    message = request.data.decode('utf-8')
+    if message:
+        next_competition = False
+        server_msg = json.loads(message)
+        auction_state = json.loads(server_msg['auction_state'])
+        print(auction_state['propositions'])
+        socketio.emit('reload', 'new message')
+        req = urllib.request.Request(f'{AUCTION_SERV_URL}/competitions', method='GET')
+        res = urllib.request.urlopen(req)
+        active_competitions = json.loads(res.read().decode('utf-8'))
+        if auction_state['propositions']['terminated'] == True:
+            results[competition_id] = auction_state
+            print(results)
+            if len(active_competitions) > 1:
+                next_competition = True
+                @socketio.on('next_auction')
+                def goto_next_bid(message):
+                    print(message)
+                    req = urllib.request.Request(f'{AUCTION_SERV_URL}/{competition_id}',
+                                                method='DELETE')
+                    res = urllib.request.urlopen(req)
+                    msg = res.read().decode('utf-8')
+                    print(msg)
+                    print(f'{competition_id} deleted.')
+                    # return redirect(url_for('start_auction'))
+                    socketio.emit('redirect', {'url': url_for('start_auction')})
+        return {'response': 'received'}
+    return render_template('active_auction.html', 
+                           competition_id=competition_id, 
+                           start_message=start_message, 
+                           message=server_msg, 
+                           next_competition=next_competition, 
+                           auction_state=auction_state['propositions'])
+    #  return render_template('active_auction.html', competition_id=competition_id, start_message=start_message, message=json.loads(message))
+
+if __name__ == '__main__':
+    socketio.run(app, port=PORT_NUMBER)

@@ -1,0 +1,366 @@
+[
+    {
+        "competition_id": "sda",
+        "title": "Enchères séquentielles : enchère à l'hollandaise",
+        "description": "Achat de trousse et cartables.",
+        "starts": "2021-10-25T18:25:43.511Z",
+        "response_clock": 30,
+        "agents": [
+            {
+                "id": "agent1",
+                "agent_type": "artificial_risk_averse",
+                "url": "http://localhost:8000/agent1",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 2,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 50,
+                            "units": 1,
+                            "good": "Cartable"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 15,
+                            "units": 1,
+                            "good": "Trousse"
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 2,
+                            "max": 2,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 50,
+                                    "units": 1,
+                                    "good": "Cartable"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 25,
+                                    "units": 1,
+                                    "good": "Livres"
+                                }
+                            ]
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 3,
+                            "max": 3,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 15,
+                                    "units": 1,
+                                    "good": "Trousse"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 10,
+                                    "units": 1,
+                                    "good": "Stylos"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 10,
+                                    "units": 1,
+                                    "good": "Crayons"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Cartable": 0,
+                    "Trousse": 0
+                },
+                "budget": 100
+            },
+            {
+                "id": "agent2",
+                "agent_type": "artificial_internal_based_strategy",
+                "url": "http://localhost:8000/agent2",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 2,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 45,
+                            "units": 1,
+                            "good": "Cartable"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 13,
+                            "units": 1,
+                            "good": "Trousse"
+                        },
+                        {
+                            "node": "ic",
+                            "value": 12,
+                            "min": 2,
+                            "max": 2,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 45,
+                                    "units": 1,
+                                    "good": "Cartable"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 20,
+                                    "units": 1,
+                                    "good": "Manuels"
+                                }
+                            ]
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 3,
+                            "max": 3,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 13,
+                                    "units": 1,
+                                    "good": "Trousse"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 12,
+                                    "units": 1,
+                                    "good": "Stylos"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 9,
+                                    "units": 1,
+                                    "good": "Crayons"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Cartable": 0,
+                    "Trousse": 0
+                },
+                "budget": 100
+            }
+        ],
+        "bid_clock": 30,
+        "mechanism": "SDA",
+        "start_price": 50,
+        "increment": -5,
+        "auction_type": "sequential",
+        "goods": [
+            {"good_name": "Cartable",
+            "good_image": "static/10.png"}, 
+            {"good_name": "Trousse",
+            "good_image": "static/11.png"}]
+    },
+    {
+        "competition_id": "ssba3",
+        "title": "Enchères séquentielles : enchère sous pli cacheté à premier prix avec transparence parfaite",
+        "description": "lorem ipsum",
+        "starts": "2021-10-25T18:25:43.511Z",
+        "response_clock": 30,
+        "agents": [
+            {
+                "id": "agent1",
+                "agent_type": "artificial_risk_averse",
+                "url": "http://localhost:8000/agent1",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 3,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 25,
+                            "units": 1,
+                            "good": "Manuels"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 10,
+                            "units": 1,
+                            "good": "Stylos"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 10,
+                            "units": 1,
+                            "good": "Crayons"
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 2,
+                            "max": 2,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 50,
+                                    "units": 1,
+                                    "good": "Cartable"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 25,
+                                    "units": 1,
+                                    "good": "Manuels"
+                                }
+                            ]
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 3,
+                            "max": 3,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 15,
+                                    "units": 1,
+                                    "good": "Trousse"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 10,
+                                    "units": 1,
+                                    "good": "Stylos"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 10,
+                                    "units": 1,
+                                    "good": "Crayons"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Manuels": 0,
+                    "Stylos": 0,
+                    "Crayons": 0
+                },
+                "budget": 100
+            },
+            {
+                "id": "agent2",
+                "agent_type": "artificial_internal_based_strategy",
+                "url": "http://localhost:8000/agent2",
+                "utility": 0,
+                "rationality": 0,
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": 3,
+                    "child_nodes": [
+                        {
+                            "node": "leaf",
+                            "value": 20,
+                            "units": 1,
+                            "good": "Manuels"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 12,
+                            "units": 1,
+                            "good": "Stylos"
+                        },
+                        {
+                            "node": "leaf",
+                            "value": 9,
+                            "units": 1,
+                            "good": "Crayons"
+                        },
+                        {
+                            "node": "ic",
+                            "value": 13,
+                            "min": 2,
+                            "max": 2,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 45,
+                                    "units": 1,
+                                    "good": "Cartable"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 20,
+                                    "units": 1,
+                                    "good": "Manuels"
+                                }
+                            ]
+                        },
+                        {
+                            "node": "ic",
+                            "value": 10,
+                            "min": 3,
+                            "max": 3,
+                            "child_nodes": [
+                                {
+                                    "node": "leaf",
+                                    "value": 13,
+                                    "units": 1,
+                                    "good": "Trousse"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 12,
+                                    "units": 1,
+                                    "good": "Stylos"
+                                },
+                                {
+                                    "node": "leaf",
+                                    "value": 9,
+                                    "units": 1,
+                                    "good": "Crayons"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "allocation": {
+                    "Manuels": 0,
+                    "Stylos": 0,
+                    "Crayons": 0
+                },
+                "budget": 100
+            }
+        ],
+        "bid_clock": 30,
+        "mechanism": "SSBA3",
+        "auction_type": "sequential",
+        "goods": [
+            {"good_name": "Manuels",
+            "good_image": "static/12.png"}, 
+            {"good_name": "Stylos",
+            "good_image": "static/13.png"}, 
+            {"good_name": "Crayons",
+            "good_image": "static/14.png"}]
+    }
+]

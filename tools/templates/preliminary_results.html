@@ -1,0 +1,33 @@
+{% extends "base.html"%}
+{% block content %}
+<div class="jumbotron">
+    <h1>Preliminary Results</h1>
+    <h2>{{ preliminary_results }}</h2>
+    <form id="next-auction" method="POST">
+        <input type="submit" value="Go to the next auction">
+    </form>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    var socket_preliminary = io.connect('http://localhost:9000');
+
+    socket_preliminary.on('reload', function(msg) {
+        location.reload();
+    });
+
+    socket_preliminary.on('redirect', function(data) {
+        window.location.href = data.url;
+    });
+
+    
+    $('#next-auction').on('submit', function(event) {
+        event.preventDefault();
+        socket_preliminary.emit('next_auction', 'next_auction');
+    });
+
+    $('#back-to-home').on('submit', function(event) {
+        event.preventDefault();
+        socket_preliminary.emit('back_to_home', 'back_to_home');
+    });
+</script>
+{% endblock %}

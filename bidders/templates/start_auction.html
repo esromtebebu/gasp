@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="jumbotron">
+    <h1>Welcome to the General Auction System in Python (GASP)</h1>
+    <p>If you want to start an auction, fill out the form below</p>
+
+    <form id="start-auction" method='POST'>
+      {# This hidden_tag is a CSRF security feature. #}
+      {{ form.hidden_tag() }}
+      {{ form.submit() }}
+    </form>
+    <br />
+    <p>Current bidders:</p>
+    <ul id="bidders-list"></ul>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+    <script>
+      var socket_manager = io.connect('http://localhost:38400');
+      let bidders = [];
+
+      socket_manager.on('agent_id', function(message) {
+        alert(`${message} joined your auction.`);
+        if (!bidders.includes(message)) {
+          bidders.push(message);
+          updateBiddersList();
+        }
+      });
+
+    updateBiddersList = () => {
+        const biddersList = document.getElementById("bidders-list");
+        biddersList.innerHTML = "";
+
+        bidders.forEach((bidder) => {
+          const listItem = document.createElement("li");
+          listItem.textContent = bidder;
+          biddersList.appendChild(listItem);
+        });
+      }
+    </script>
+  </div>
+{% endblock %}

@@ -1,0 +1,32 @@
+To Do:
+    - core:
+        # - SSBA1
+        # - SSBA2
+        - SSBA3
+        - CE
+    - bidders.human_bidder:
+        # - budget & allocation update in sequential auctions
+        - player initiated games
+    - tools.auction_manager:
+        - create custom auction (and valuations for artificial bidders)
+        - force next
+        # - implement competitions' templates
+        # - manage auctions
+            # - manage sequential auctions
+            # - manage single auctions
+            # - compute "rationality" score & rank
+    - bidders + tools:
+        - save data to MongoDB
+    - bidders.artificial_bidders:
+        - Fill valuations for custom auctions
+        # - risk averse strategy
+        # - internal based strategy
+        - stochastic “strategy”
+    - heroku/render:
+        # - deploy
+    - UI/UX:
+        - bidders.human_bidders
+        - tools.auction_manager
+            - add images to goods
+    - Documentation:
+        - Add on top of the existing docs for general users (offline version).

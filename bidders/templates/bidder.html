@@ -1,0 +1,92 @@
+{% extends "base.html"%}
+{% block content %}
+<div class="jumbotron">
+    <form id="bidder-form" method="POST">
+        <label for="initial_budget">Budget:</label>
+        <input id="initial_budget" type="number" placeholder="Ex: 44" value="{{stochastic_value*3}}" required/>
+        <br/>
+        <label for="max">Maximum:</label>
+        <input id="max" type="number" placeholder="Maximum quantity of goods" max="{{ goods_length }}" min="0" required/>
+        <br/>
+        <label for="min">Minimum:</label>
+        <input id="min" type="number" placeholder="Minimum quantity of goods" max="{{ goods_length }}" min="0" required/>
+        <br/>
+        <label for="value">Value:</label>
+        <input id="value" type="number" placeholder="Value" value="0" required/>
+        {% for competition in competitions_data %}
+            <h1>In competition {{ competition }}</h1>
+                {% for good in competitions_data[competition]['goods'] %}
+                    <br/>
+                    <label for="{{competition}}_{{good}}_valuation">Valuation for {{good}}:</label>
+                    <br/>
+                    <input id="{{competition}}_{{good}}_valuation" value="{{stochastic_value}}" type="number" placeholder="Enter your valuation of this good" required/>
+                    <br/>
+                    <label for="{{competition}}_{{good}}_units">Units for {{good}}:</label>
+                    <br/>
+                    <input id="{{competition}}_{{good}}_units" value="1" type="number" placeholder="Enter your desired quantity" required />
+                {% endfor %}
+        {% endfor %}
+        <br/>
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    var socket_bidder = io.connect('http://localhost:38400');
+    socket_bidder.on('reload', function(msg) {
+        location.reload();
+    });
+    /*socket_bidder.on('redirect', function(data) {
+        window.location.href = data.url;
+    });*/
+    $('#bidder-form').on('submit', function(event) {
+        event.preventDefault();
+        var competitions_raw = "{{ competitions_data }}";
+        var competitions = JSON.parse(competitions_raw.replace(/&#39;/g, '"'));
+        let agentData = {};
+        console.log(competitions);
+        let allocationData = {};
+        let globalGoods = []
+        console.log(allocationData);
+        for (let i in competitions) {
+            for (let j in competitions[i]['goods']) {
+                globalGoods.push(competitions[i]['goods'][j]);
+            };
+        };
+        console.log(globalGoods);
+        globalGoods.forEach(good => allocationData[good] = 0);
+        console.log(allocationData)
+        for (let i in competitions) {
+            let goods = competitions[i]['goods'];
+            let valuationData = [];
+            for (let j = 0; j < goods.length; j++) {
+                valuationData.push({
+                    "node": "leaf",
+                    "value": parseInt($(`#${i}_${goods[j]}_valuation`).val()),
+                    "units": parseInt($(`#${i}_${goods[j]}_units`).val()),
+                    "good": goods[j]
+                });
+            };
+            agentData[competitions[i]["competition_id"]] = {
+                "id": "{{agent_id}}",
+                "competition_id": i,
+                "agent_type": "human",
+                "url": "http://localhost:38400/" + "{{agent_id}}",
+                "budget": parseInt($(`#initial_budget`).val()),
+                "valuation": {
+                    "node": "ic",
+                    "value": 0,
+                    "min": 0,
+                    "max": goods.length,
+                    "child_nodes": valuationData
+                },
+                "allocation": allocationData
+            };
+        };
+        socket_bidder.emit('bidder_join', agentData);
+        const bidderURL = window.location.href;
+        window.location.href = bidderURL + "/" + "play";
+    });
+</script>
+{% endblock %}
