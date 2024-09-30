@@ -15,7 +15,7 @@ import os
 
 AUCTION_SERV_URL = "http://localhost:5000"
 PORT_NUMBER = 9000
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 cors = CORS(app)
 # cors = CORS(app, resources={r'/': {'origins': f'http://localhost:80'}})
 app.config['SECRET_KEY'] = '*********'
@@ -32,6 +32,7 @@ temp_results = {}
 def_results = {}
 results = {}
 goods_image = []    
+still_to_sell = []
 
 class CreateAuctions(FlaskForm):
     '''
@@ -39,7 +40,7 @@ class CreateAuctions(FlaskForm):
     '''
     auction_type = SelectField("What type of auction do you want to create?",
                                choices=[("sequential", "Sequential Auctions"), ("single", "Single Auctions")])
-    submit = SubmitField("Proceed")
+    submit = SubmitField("Commencer")
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -111,11 +112,11 @@ def start_auction():
         '''
             Start auction.
         '''
-        competition_id = SelectField('Start a competition',
+        competition_id = SelectField('Choisissez la compétition',
                                 choices=[competition[i]
                                         for i in range(len(competition))],
                                 validators=[DataRequired()])
-        submit = SubmitField('Start Auction')
+        submit = SubmitField("Lancer l'enchère")
     form = StartAuction()
     htmldoc = None
     agent_ids = []
@@ -137,13 +138,14 @@ def start_auction():
 
 @app.route('/launch/<competition_id>', methods=['GET', 'POST'])
 def active_auction(competition_id):
-    global server_msg, next_competition, auction_state, current_competition_id, len_active_auctions, sequential, goods_image
+    global server_msg, next_competition, auction_state, current_competition_id, len_active_auctions, sequential, goods_image, still_to_sell
     current_competition_id = competition_id
     message = request.data.decode('utf-8')
     if message:
         next_competition = False
         server_msg = json.loads(message)
         auction_state = json.loads(server_msg['auction_state'])
+        goods = server_msg["goods"]
         print(message)
         goods_image = []
         for good in server_msg['goods']:
@@ -163,6 +165,8 @@ def active_auction(competition_id):
             res = urllib.request.urlopen(req)
             msg = res.read().decode('utf-8')
             print(msg)
+        if 'sold' in auction_state:
+            still_to_sell = [good for idx, good in enumerate(goods) if not auction_state['sold'][idx]]
         if auction_state['propositions']['terminated'] == True: 
             results[competition_id] = auction_state
             print(results)
@@ -190,7 +194,8 @@ def active_auction(competition_id):
                            auction_state=auction_state['propositions'],
                            len_active_auctions=len_active_auctions,
                            sequential=sequential,
-                           goods_image=goods_image)
+                           goods_image=goods_image,
+                           still_to_sell=still_to_sell)
     #  return render_template('active_auction.html', competition_id=competition_id, start_message=start_message, message=json.loads(message))
 
 
@@ -226,6 +231,8 @@ def preliminary_results():
         temp_results[msg['agent_id']] = {}
         temp_results[msg['agent_id']]['utility'] = msg['utility']
         temp_results[msg['agent_id']]['rationality'] = msg['rationality']
+        temp_results[msg['agent_id']]['budget'] = msg['final_budget']
+        temp_results[msg['agent_id']]['allocation'] = msg['new_allocation']
         socketio.emit('reload', msg['agent_id'])
         # @socketio.on('next_auction')
         # def goto_launch(message):
@@ -249,6 +256,8 @@ def final_results():
         def_results[msg['agent_id']] = {}
         def_results[msg['agent_id']]['utility'] = msg['utility']
         def_results[msg['agent_id']]['rationality'] = msg['rationality']
+        def_results[msg['agent_id']]['budget'] = msg['final_budget']
+        def_results[msg['agent_id']]['allocation'] = msg['new_allocation']
         socketio.emit('reload', msg['agent_id'])
         # @socketio.on('back_to_home')
         # def goto_home(message):

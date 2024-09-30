@@ -52,7 +52,7 @@ auction_type = None
 agent_ids = {}
 rationality = {}
 utility = {}
-acquired_goods = {}
+acquired_goods = []
 joint_allocation = {}
 auction_state = {}
 paid = {}
@@ -176,11 +176,13 @@ def update_agent_data(final_budget, competition_id, agent_id, existing_allocatio
     msg = res.read().decode('utf-8')
     print(msg)  
 
-def update_manager(agent_id, trades, sold_prices, rationality, url):
+def update_manager(agent_id, trades, sold_prices, rationality, url, final_budget, existing_allocation):
     data = {
     'agent_id': agent_id,
     'utility': utility[agent_id],
-    'rationality': rationality[agent_id]
+    'rationality': rationality[agent_id],
+    'final_budget': final_budget,
+    'new_allocation': existing_allocation[agent_id], 
     }
     req = urllib.request.Request(
         f'{url}',
@@ -371,10 +373,56 @@ def truthful_bidder(agent_id):
                     t = Thread(target=update_agent_data, args=(final_budget, competition_id, agent_id, existing_allocation, trades, sold_prices, rationality, auction_type, 'True'))
                     t.start() 
                 if len(active_competitions) > 1 and auction_type == 'sequential':
-                    t = Thread(target=update_manager, args=(agent_id, trades, sold_prices, rationality, 'http://localhost:9000/preliminary-results'))
+                    payments = json.loads(message['auction_state'])['joint_payment']
+                    joint_allocation = json.loads(message['auction_state'])['joint_allocation']
+                    trades = json.loads(message['auction_state'])['joint_trade']
+                    sold_prices = json.loads(message['auction_state'])['propositions']['sold_prices']
+                    new_allocation = {}
+                    if agent_id in joint_allocation:
+                        new_allocation[agent_id] = {}
+                        for good in joint_allocation[agent_id]:
+                            new_allocation[agent_id][good] = joint_allocation[agent_id][good]
+                    paid[agent_id] = 0
+                    final_budget = budgets[agent_id]
+                    existing_allocation[agent_id] = {}
+                    if agent_id in payments.keys():
+                        paid[agent_id] = payments[agent_id]
+                        final_budget = budgets[agent_id] - paid[agent_id]
+                        req = urllib.request.Request(f'{AUCTION_SERV_URL}/{competition_id}', method='GET')
+                        res = urllib.request.urlopen(req)
+                        competition_data = json.loads(res.read().decode('utf-8'))
+                        for agent in competition_data["agents"]:
+                            if agent["id"] == agent_id:
+                                existing_allocation[agent_id] = agent["allocation"]
+                        for good in new_allocation[agent_id]:
+                            existing_allocation[agent_id][good] = new_allocation[agent_id][good]
+                    t = Thread(target=update_manager, args=(agent_id, trades, sold_prices, rationality, 'http://localhost:9000/preliminary-results', final_budget, existing_allocation))
                     t.start()
                 else:
-                    t = Thread(target=update_manager, args=(agent_id, trades, sold_prices, rationality, 'http://localhost:9000/final-results'))
+                    payments = json.loads(message['auction_state'])['joint_payment']
+                    joint_allocation = json.loads(message['auction_state'])['joint_allocation']
+                    trades = json.loads(message['auction_state'])['joint_trade']
+                    sold_prices = json.loads(message['auction_state'])['propositions']['sold_prices']
+                    new_allocation = {}
+                    if agent_id in joint_allocation:
+                        new_allocation[agent_id] = {}
+                        for good in joint_allocation[agent_id]:
+                            new_allocation[agent_id][good] = joint_allocation[agent_id][good]
+                    paid[agent_id] = 0
+                    final_budget = budgets[agent_id]
+                    existing_allocation[agent_id] = {}
+                    if agent_id in payments.keys():
+                        paid[agent_id] = payments[agent_id]
+                        final_budget = budgets[agent_id] - paid[agent_id]
+                        req = urllib.request.Request(f'{AUCTION_SERV_URL}/{competition_id}', method='GET')
+                        res = urllib.request.urlopen(req)
+                        competition_data = json.loads(res.read().decode('utf-8'))
+                        for agent in competition_data["agents"]:
+                            if agent["id"] == agent_id:
+                                existing_allocation[agent_id] = agent["allocation"]
+                        for good in new_allocation[agent_id]:
+                            existing_allocation[agent_id][good] = new_allocation[agent_id][good]
+                    t = Thread(target=update_manager, args=(agent_id, trades, sold_prices, rationality, 'http://localhost:9000/final-results', final_budget, existing_allocation))
                     t.start()
                 for i in competitions:
                     if i['competition_id'] == competition_id:
@@ -407,7 +455,8 @@ def truthful_bidder(agent_id):
                            agent_data=agents_data,
                            auction_state=auction_state,
                            competition_id=competition_id,
-                           valuation=valuations)
+                           valuation=valuations,
+                           acquired_goods=acquired_goods)
 
 @app.route("/<agent_id>/play", methods=["GET", "POST", "PATCH"])
 def bid(agent_id):

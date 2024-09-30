@@ -76,6 +76,8 @@ async def _update_auction_manager(competition, session):
     if competition["mechanism"] != "SSBA3":
         json_body = {
             "competition_id": competition['competition_id'],
+            "title": competition["title"],
+            "description": competition["description"],
             "auction_state": json.dumps(auction.state()),
             "mechanism": competition["mechanism"],
             "goods": competition['goods'],
@@ -84,6 +86,8 @@ async def _update_auction_manager(competition, session):
     else:
         json_body = {
             "competition_id": competition['competition_id'],
+            "title": competition["title"],
+            "description": competition["description"],
             "auction_state": json.dumps(auction.state()),
             "mechanism": competition["mechanism"],
             "auction_type": competition["auction_type"],

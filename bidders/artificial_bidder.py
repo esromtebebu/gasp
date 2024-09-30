@@ -213,11 +213,13 @@ def update_agent_data(final_budget, competition_id, agent_id, existing_allocatio
     msg = res.read().decode('utf-8')
     print(msg)  
 
-def update_manager(agent_id, trades, sold_prices, rationality, url):
+def update_manager(agent_id, trades, sold_prices, rationality, url, final_budget, existing_allocation):
     data = {
     'agent_id': agent_id,
     'utility': utility[agent_id],
-    'rationality': rationality[agent_id]
+    'rationality': rationality[agent_id],
+    'final_budget': final_budget,
+    'new_allocation': existing_allocation[agent_id], 
     }
     req = urllib.request.Request(
         f'{url}',
@@ -465,10 +467,46 @@ def truthful_bidder(agent_id):
             # msg = res.read().decode('utf-8')
             # print(msg)  
         if len(active_competitions) > 1 and auction_type == 'sequential':
-            t = Thread(target=update_manager, args=(agent_id, trades, sold_prices, rationality, 'http://localhost:9000/preliminary-results'))
+            if agent_id in joint_allocation:
+                new_allocation[agent_id] = {}
+                for good in joint_allocation[agent_id]:
+                    new_allocation[agent_id][good] = joint_allocation[agent_id][good]
+            paid[agent_id] = 0
+            final_budget = budgets[agent_id]
+            existing_allocation[agent_id] = {}
+            if agent_id in payments.keys():
+                paid[agent_id] = payments[agent_id]
+                final_budget = budgets[agent_id] - paid[agent_id]
+                req = urllib.request.Request(f'{AUCTION_SERV_URL}/{competition_id}', method='GET')
+                res = urllib.request.urlopen(req)
+                competition_data = json.loads(res.read().decode('utf-8'))
+                for agent in competition_data["agents"]:
+                    if agent["id"] == agent_id:
+                        existing_allocation[agent_id] = agent["allocation"]
+                for good in new_allocation[agent_id]:
+                    existing_allocation[agent_id][good] = new_allocation[agent_id][good]
+            t = Thread(target=update_manager, args=(agent_id, trades, sold_prices, rationality, 'http://localhost:9000/preliminary-results', final_budget, existing_allocation))
             t.start()
         else:
-            t = Thread(target=update_manager, args=(agent_id, trades, sold_prices, rationality, 'http://localhost:9000/final-results'))
+            if agent_id in joint_allocation:
+                new_allocation[agent_id] = {}
+                for good in joint_allocation[agent_id]:
+                    new_allocation[agent_id][good] = joint_allocation[agent_id][good]
+            paid[agent_id] = 0
+            final_budget = budgets[agent_id]
+            existing_allocation[agent_id] = {}
+            if agent_id in payments.keys():
+                paid[agent_id] = payments[agent_id]
+                final_budget = budgets[agent_id] - paid[agent_id]
+                req = urllib.request.Request(f'{AUCTION_SERV_URL}/{competition_id}', method='GET')
+                res = urllib.request.urlopen(req)
+                competition_data = json.loads(res.read().decode('utf-8'))
+                for agent in competition_data["agents"]:
+                    if agent["id"] == agent_id:
+                        existing_allocation[agent_id] = agent["allocation"]
+                for good in new_allocation[agent_id]:
+                    existing_allocation[agent_id][good] = new_allocation[agent_id][good]
+            t = Thread(target=update_manager, args=(agent_id, trades, sold_prices, rationality, 'http://localhost:9000/final-results', final_budget, existing_allocation))
             t.start()
         return {'response': 'done'}
     if message['message_type'] == 'abort':

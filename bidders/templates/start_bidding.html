@@ -16,10 +16,10 @@
         <div class="container">
             <div>
                 <h1 id="budget" class="h3 mb-3 fw-normal float-end">Budget : {{ budgets[agent_id] - paid[agent_id] }}</h1>
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Valuation privée</button>
+                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions1" aria-controls="offcanvasWithBothOptions">Valuation privée</button>
             </div>
             <div>
-            <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+            <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions1" aria-labelledby="offcanvasWithBothOptionsLabel">
                 <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Vos valuations</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -61,7 +61,7 @@
                                         {{ j['good'] }}{% if not loop.last %}, {% endif %}
                                     {% endfor %}
                                 </td>                                
-                                <td>{{ i['value'] }}</td>
+                                <td>+ {{ i['value'] }}</td>
                             </tr>
                         {% endif %}
                     {% endfor %}
@@ -69,6 +69,29 @@
                  </table>
                 </div>
             </div>
+
+            <div>
+                <h1 id="achats" class="h3 mb-3 fw-normal float-end">Vos achats</h1>
+                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions2" aria-controls="offcanvasWithBothOptions">Vos achats</button>
+            </div>
+            <div>
+            <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions2" aria-labelledby="offcanvasWithBothOptionsLabel">
+                <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Vos achats</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                <!-- <p>{{ valuation[agent_id]}}</p> -->
+                <ul>
+                    {% for acquired_good in acquired_goods[agent_id] %}
+                        <li>{{acquired_good}}</li>
+                    {% endfor %}
+                </ul>
+                </div>
+            </div>
+
+            
+
         </div>
         {% if mechanism == 'SAA' or mechanism == 'SDA' %}
             <!-- <h1>Le prix des bien est de {{ auction_state["price"] }} €.</h1> -->

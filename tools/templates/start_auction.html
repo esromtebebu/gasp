@@ -1,17 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="jumbotron">
-    <h1>Welcome to the General Auction System in Python (GASP)</h1>
-    <p>If you want to start an auction, fill out the form below</p>
+  <div class="container">
+    <p class="lead text-center">Choisissez l'enchère que vous voulez lancer</p>
 
     <form id="start-auction" method='POST'>
       {# This hidden_tag is a CSRF security feature. #}
       {{ form.hidden_tag() }}
-      {{form.competition_id.label}}{{form.competition_id}}
-      {{ form.submit() }}
+      {{form.competition_id(class="form-select")}}
+      {{ form.submit(class="btn btn-primary")}}
     </form>
     <br />
-    <p>Current bidders:</p>
+    <p class="lead text-center">Les enchérisseurs</p>
     <ul id="bidders-list"></ul>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>

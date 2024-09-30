@@ -1,11 +1,12 @@
 {% extends "base.html"%}
 {% block content %}
-<div class="jumbotron">
+<div class="container">
+    <p class="lead text-center">Quelle type de compétition voulez vous lancer ?</p>
     <form method="POST">
         {{ form.hidden_tag() }}
-        {{form.auction_type.label}}{{form.auction_type}}
+        {{form.auction_type(class="form-select")}}
         <br />
-        {{ form.submit() }}
+        {{ form.submit(class="btn btn-primary") }}
     </form>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
