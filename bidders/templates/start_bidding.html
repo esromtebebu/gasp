@@ -17,12 +17,13 @@
             <div>
                 <h1 id="budget" class="h3 mb-3 fw-normal float-end">Budget : {{ budgets[agent_id] - paid[agent_id] }}</h1>
                 <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions1" aria-controls="offcanvasWithBothOptions">Valuation privée</button>
+                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions2" aria-controls="offcanvasWithBothOptions">Vos achats</button>
             </div>
-            <div>
-            <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions1" aria-labelledby="offcanvasWithBothOptionsLabel">
+
+            <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions1" aria-labelledby="offcanvasWithBothOptionsLabel1">
                 <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Vos valuations</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel1">Vos valuations</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                 <!-- <p>{{ valuation[agent_id]}}</p> -->
@@ -70,23 +71,18 @@
                 </div>
             </div>
 
-            <div>
-                <h1 id="achats" class="h3 mb-3 fw-normal float-end">Vos achats</h1>
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions2" aria-controls="offcanvasWithBothOptions">Vos achats</button>
-            </div>
-            <div>
-            <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions2" aria-labelledby="offcanvasWithBothOptionsLabel">
+            <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions2" aria-labelledby="offcanvasWithBothOptionsLabel2">
                 <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Vos achats</h5>
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel2">Vos achats</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                <!-- <p>{{ valuation[agent_id]}}</p> -->
-                <ul>
-                    {% for acquired_good in acquired_goods[agent_id] %}
-                        <li>{{acquired_good}}</li>
-                    {% endfor %}
-                </ul>
+                <!-- <p>{{ acquired_goods[agent_id]}}</p> -->
+                    <ul>
+                        {% for acquired_good in acquired_goods[agent_id] %}
+                            <li>{{acquired_good}}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
 
@@ -128,7 +124,7 @@
                     </div>
                 </div>
                 <div class="position-relative">
-                    <button class="btn btn-primary w-25 py-2 position-absolute top-100 start-50 translate-middle" type="submit">Soummettre</button>
+                    <button class="btn btn-primary w-25 py-2 position-absolute top-100 start-50 translate-middle" type="submit">Soumettre</button>
                 </div>
             </form>
             <!-- <form id="sa-bid-form" method='POST'>
@@ -177,7 +173,7 @@
                     </div>
                 </div>
                 <div class="position-relative">
-                    <button class="btn btn-primary w-25 py-2 position-absolute top-100 start-50 translate-middle" type="submit">Soummettre</button>
+                    <button class="btn btn-primary w-25 py-2 position-absolute top-100 start-50 translate-middle" type="submit">Soumettre</button>
                 </div>
             </form>
         {% endif %}
@@ -216,6 +212,12 @@
         <p class="text-center">En attente de la prochaine étape...</p>
     {% elif state[agent_id] == 'stop' %}  
         <p class="lead text-center">L'enchère est terminée !</p>
+        <p>Votre budget est de {{budgets[agent_id] - paid[agent_id]}} et vous avez achetez les biens suivants:</p>
+        <ul>
+            {% for acquired_good in acquired_goods[agent_id] %}
+                <li>{{acquired_good}}</li> 
+            {% endfor %}
+        </ul>
         <!-- {{ stop_message[agent_id] }} -->
     {% elif state[agent_id] == 'abort' %}
         <p class="lead text-center">L'enchère a été arrêtée !</p>

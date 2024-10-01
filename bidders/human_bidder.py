@@ -52,7 +52,7 @@ auction_type = None
 agent_ids = {}
 rationality = {}
 utility = {}
-acquired_goods = []
+acquired_goods = {}
 joint_allocation = {}
 auction_state = {}
 paid = {}
@@ -304,6 +304,10 @@ def truthful_bidder(agent_id):
                 paid[agent_id] = 0
                 if agent_id in payments.keys():
                     paid[agent_id] = payments[agent_id]
+                if agent_id in joint_allocation:
+                    for good in joint_allocation[agent_id]:
+                        if good not in acquired_goods[agent_id]:
+                            acquired_goods[agent_id].append(good)
                 socketio.emit('reload', 'new message')
                 # print(goods_image)
                 return {'response': 'received'}    
@@ -470,9 +474,11 @@ def receive_bid_msg(msg):
     bid_msg[agent_id] = selected_goods
     print(msg)
     leafy_utility, ic_utility, bundles, bounds = compute_valuations(valuations[agent_id], still_to_sell)
-    if agent_id in joint_allocation:
+    if agent_id in joint_allocation and agent_id != 'favicon.ico':
         for good in joint_allocation[agent_id]:
-            acquired_goods[agent_id].append(good)
+            if good not in acquired_goods[agent_id]:
+                acquired_goods[agent_id].append(good)
+    print(f"Acquired goods for {agent_id}", acquired_goods[agent_id])
     forthcoming_goods = {}
     forthcoming_goods[agent_id] = []
     for bundle in bundles:

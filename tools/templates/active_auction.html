@@ -2,80 +2,89 @@
 {% block content %}
 <div class="container">
     {% if message['message_type'] != 'start' %}
-        <p class="lead text-center">La compétition {{ start_message['title'] }} a démarré !</p>
-        <p>{{ start_message["description"] }}</p>
-        {% if auction_state['terminated'] == False %}
-            {% if start_message['mechanism'] == 'SAA' or start_message['mechanism'] == 'SDA' %}
+        <p class="lead text-center">La compétition {{ message['title'] }} a démarré !</p>
+        <p>{{ message["description"] }}</p>
+        {% if propositions['terminated'] == False %}
+            {% if message['mechanism'] == 'SAA' or message['mechanism'] == 'SDA' %}
                 <div class="album py-5 bg-body-tertiary">
                     <div class="container">
+                
                         <div class="row justify-content-evenly">
                             {% for i in goods_image %}
-                                <!-- {% if i['good_name'] in still_to_sell %} -->
+                                {% if i['good_name'] in still_to_sell %}
+                                    <!-- <p>{{ still_to_sell}}</p> -->
                                     <div class="col-3">
                                         <div class="card shadow-sm">
-                                            <img class="bd-placeholder-img card-img" width="50%" height="50%" src="data:image/png;base64,{{ i['good_image'] }}" />
-                                        <!-- <svg class="bd-placeholder-img card-img-top" width="50%" height="50%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
-                                            <div class="card-body">
-                                                <div class="row justify-content-between">
-                                                    <div class="col-4">
-                                                        <p class="card-text">{{ i['good_name'] }}</p>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <p class="card-text">{{ auction_state["price"] }} €</p>
-                                                    </div>
-                                                </div>
+                                        <img class="bd-placeholder-img card-img" width="50%" height="50%" src="data:image/png;base64,{{ i['good_image'] }}" />
+                                            <!-- <svg class="bd-placeholder-img card-img-top" width="50%" height="50%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
+                                        <div class="card-body">
+                                            <div class="row justify-content-between">
+                                            <div class="col-4">
+                                                <p class="card-text">{{i['good_name']}}</p>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="card-text">{{auction_state['price']}}</p>
+                                            </div>
                                             </div>
                                         </div>
+                                        </div>
                                     </div>
-                                    <!-- <img src="data:image/png;base64,{{ i['good_image'] }}" alt="{{ i['good_name'] }}" /> -->
-                                <!-- {% endif %} -->
+                                {% endif %}
                             {% endfor %}
                         </div>
                     </div>
                 </div>
-                <form id="force-ready" method="POST">
-                    <input class="btn btn-primary" type="submit" value="Prochaine étape"/>
-                </form>
+                <div class="container">
+                    <form id="force-ready" method="POST">
+                        <input class="btn btn-primary" type="submit" value="Prochaine étape"/>
+                    </form>
+                </div>
             {% else %}
                 <div class="album py-5 bg-body-tertiary">
                     <div class="container">
+                
                         <div class="row justify-content-evenly">
                             {% for i in goods_image %}
+                                {% if i['good_name'] in still_to_sell %}
+                                    <!-- <p>{{ still_to_sell}}</p> -->
                                     <div class="col-3">
                                         <div class="card shadow-sm">
-                                            <img class="bd-placeholder-img card-img" width="50%" height="50%" src="data:image/png;base64,{{ i['good_image'] }}" />
+                                        <img class="bd-placeholder-img card-img" width="50%" height="50%" src="data:image/png;base64,{{ i['good_image'] }}" />
                                             <!-- <svg class="bd-placeholder-img card-img-top" width="50%" height="50%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
-                                            <div class="card-body">
-                                                <div class="row justify-content-between">
-                                                    <div class="col-4">
-                                                        <p class="card-text">{{ i['good_name'] }}</p>
-                                                    </div>
+                                        <div class="card-body">
+                                            <div class="row justify-content-center">
+                                                <div class="col">
+                                                    <p class="card-text">{{i['good_name']}}</p>
                                                 </div>
                                             </div>
                                         </div>
-                                    <!-- <img src="data:image/png;base64,{{ i['good_image'] }}" alt="{{ i['good_name'] }}" /> -->
+                                        </div>
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     </div>
                 </div>
-                <form id="force-ready" method="POST">
-                    <input class="btn btn-primary" type="submit" value="Prochaine étape"/>
-                </form>
+                <div class="container">
+                    <form id="force-ready" method="POST">
+                        <input class="btn btn-primary" type="submit" value="Prochaine étape"/>
+                    </form>
+                </div>
             {% endif %}
         {% else %}
-            <h1>La compétition {{ start_message['title'] }} est terminée !</h1>
+            <p>La compétition {{ message['title'] }} est terminée !</p>
             {% if len_active_auctions > 1 and sequential %}
                 <form id="goto-preliminary" method="POST">
-                    <input type="submit" value="Résultats préliminaires"/>
+                    <input class="btn btn-primary" type="submit" value="Résultats préliminaires"/>
                 </form>
             {% else %}
                 <form id="goto-final" method="POST">
-                    <input type="submit" value="Résultats finals"/>
+                    <input class="btn btn-primary" type="submit" value="Résultats finals"/>
                 </form>
             {% endif %}
         {% endif %}
     {% else %}
-        <h1>Competition started...</h1>
+        <p class="lead text-center">La compétition a démarré</p>
     {% endif %}
 </div>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>

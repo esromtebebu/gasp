@@ -1,15 +1,42 @@
 {% extends "base.html"%}
 {% block content %}
 <div class="jumbotron">
-    <h1>Final Results</h1>
-    <h2>{{ final_results }}</h2>
+    <p class="lead text-center">Résultats finals</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Joueur</th>
+                <th>Utilité</th>
+                <th>Budget</th>
+                <th>Achats</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for agent in final_results%}
+            <tr>
+                <td>{{agent}}</td>
+                <td>{{final_results[agent]["utility"]}}</td>
+                <td>{{final_results[agent]["budget"]}} €</td>
+                <td>
+                    <ul>
+                    {% for g in final_results[agent]["allocation"] %}
+                        {% if final_results[agent]["allocation"][g] != 0 %}
+                        <li>{{ g }}</li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {% if next_competition %}
         <form id="next-auction" method="POST">
-            <input type="submit" value="Go to the next auction">
+            <input class="btn btn-primary" type="submit" value="Prochaine compétition">
         </form>
     {% else %}
         <form id="back-to-home" method="POST">
-            <input type="submit" value="Go to the homepage.">
+            <input class="btn btn-primary" type="submit" value="Page d'accueil">
         </form> 
     {% endif %}
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>

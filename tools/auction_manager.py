@@ -146,6 +146,9 @@ def active_auction(competition_id):
         server_msg = json.loads(message)
         auction_state = json.loads(server_msg['auction_state'])
         goods = server_msg["goods"]
+        still_to_sell = goods
+        if 'sold' in auction_state:
+            still_to_sell = [good for idx, good in enumerate(goods) if not auction_state['sold'][idx]]
         print(message)
         goods_image = []
         for good in server_msg['goods']:
@@ -165,8 +168,6 @@ def active_auction(competition_id):
             res = urllib.request.urlopen(req)
             msg = res.read().decode('utf-8')
             print(msg)
-        if 'sold' in auction_state:
-            still_to_sell = [good for idx, good in enumerate(goods) if not auction_state['sold'][idx]]
         if auction_state['propositions']['terminated'] == True: 
             results[competition_id] = auction_state
             print(results)
@@ -191,7 +192,8 @@ def active_auction(competition_id):
                            start_message=start_message, 
                            message=server_msg, 
                            next_competition=next_competition, 
-                           auction_state=auction_state['propositions'],
+                           propositions=auction_state['propositions'],
+                           auction_state=auction_state,
                            len_active_auctions=len_active_auctions,
                            sequential=sequential,
                            goods_image=goods_image,

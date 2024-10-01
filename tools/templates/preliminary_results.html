@@ -1,10 +1,37 @@
 {% extends "base.html"%}
 {% block content %}
 <div class="jumbotron">
-    <h1>Preliminary Results</h1>
-    <h2>{{ preliminary_results }}</h2>
+    <p class="lead text-center">Résults préliminaires</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Joueur</th>
+                <th>Utilité</th>
+                <th>Budget</th>
+                <th>Achats</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for agent in preliminary_results%}
+            <tr>
+                <td>{{agent}}</td>
+                <td>{{preliminary_results[agent]["utility"]}}</td>
+                <td>{{preliminary_results[agent]["budget"]}} €</td>
+                <td>
+                    <ul>
+                    {% for g in preliminary_results[agent]["allocation"] %}
+                        {% if  preliminary_results[agent]["allocation"][g] != 0%}
+                            <li>{{g}}</li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     <form id="next-auction" method="POST">
-        <input type="submit" value="Go to the next auction">
+        <input class="btn btn-primary" type="submit" value="Prochaine compétition">
     </form>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
