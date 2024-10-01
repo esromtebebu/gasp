@@ -138,7 +138,7 @@ def start_auction():
 
 @app.route('/launch/<competition_id>', methods=['GET', 'POST'])
 def active_auction(competition_id):
-    global server_msg, next_competition, auction_state, current_competition_id, len_active_auctions, sequential, goods_image, still_to_sell
+    global server_msg, next_competition, auction_state, current_competition_id, len_active_auctions, sequential, goods_image, still_to_sell, def_results, temp_results
     current_competition_id = competition_id
     message = request.data.decode('utf-8')
     if message:
@@ -178,9 +178,11 @@ def active_auction(competition_id):
             sequential = active_competitions[0]['auction_type'] == 'sequential'
             if len(active_competitions) > 1 and active_competitions[0]['auction_type'] == 'sequential':
                 next_competition = True
+                temp_results = {}
                 socketio.emit('redirect', {'url': url_for('preliminary_results')})
             elif len(active_competitions) > 1 and active_competitions[0]['auction_type'] == 'single':
                 next_competition = True
+                def_results = {}
                 socketio.emit('redirect', {'url': url_for('final_results')})
                 # return redirect(url_for('final_results'))
             else:

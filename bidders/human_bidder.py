@@ -57,14 +57,12 @@ joint_allocation = {}
 auction_state = {}
 paid = {}
 goods_image = {}
+players = []
 lock = Lock()
 
 def log(msg, agent_id):
     with lock:
         sys.stdout.write(f'Bidder {agent_id} > {msg}\n')
-
-with open('bidders/players.json') as players_data:
-    players = json.load(players_data)
 
 def compute_valuations(valuation, still_to_sell): #still_to_sell -> goods?
     leafy_utility = {}
@@ -194,6 +192,9 @@ def update_manager(agent_id, trades, sold_prices, rationality, url, final_budget
     msg = res.read().decode('utf-8')
     print(msg) 
 
+with open('bidders/players.json') as players_data:
+    players = json.load(players_data)
+
 @app.route('/', methods=['GET', 'POST'])
 def competition():
     global agent_ids, competitions
@@ -213,7 +214,7 @@ def competition():
 
 @app.route('/<agent_id>', methods=['GET', 'POST'])
 def bidder(agent_id):
-    global agents_data
+    global agents_data, competitions, players
     competition_data = {}
     agents_data[agent_id] = {}
     for competition in competitions:
@@ -223,16 +224,31 @@ def bidder(agent_id):
         htmldoc = res.read().decode('utf-8')
         competition_data[competition["competition_id"]] = json.loads(htmldoc)
     for competition_id in competition_data:
-        for competition in players:
-            if competition_data[competition_id]["title"] == competition["title"] and len(competition["agents"]) > 0 and agent_id != "favicon.ico":
-                random_player = random.randint(0, len(competition["agents"]) - 1)
-                agents_data[agent_id][competition_id] = {}
-                agents_data[agent_id][competition_id] = competition["agents"][random_player]
-                agents_data[agent_id][competition_id]["id"] = agent_id
-                agents_data[agent_id][competition_id]["competition_id"] = competition_id
-                agents_data[agent_id][competition_id]["url"] = 'http://localhost:38400/' + agent_id
-                del competition["agents"][random_player]
-                print("rand_num deleted", random_player)
+        if players:
+            for competition in players:
+                if competition_data[competition_id]["title"] == competition["title"] and len(competition["agents"]) > 0 and agent_id != "favicon.ico":
+                    random_player = random.randint(0, len(competition["agents"]) - 1)
+                    agents_data[agent_id][competition_id] = {}
+                    agents_data[agent_id][competition_id] = competition["agents"][random_player]
+                    agents_data[agent_id][competition_id]["id"] = agent_id
+                    agents_data[agent_id][competition_id]["competition_id"] = competition_id
+                    agents_data[agent_id][competition_id]["url"] = 'http://localhost:38400/' + agent_id
+                    del competition["agents"][random_player]
+                    print("rand_num deleted", random_player)
+        else:
+            with open('bidders/players.json') as players_data:
+                players = json.load(players_data)
+            for competition in players:
+                if competition_data[competition_id]["title"] == competition["title"] and len(competition["agents"]) > 0 and agent_id != "favicon.ico":
+                    random_player = random.randint(0, len(competition["agents"]) - 1)
+                    agents_data[agent_id][competition_id] = {}
+                    agents_data[agent_id][competition_id] = competition["agents"][random_player]
+                    agents_data[agent_id][competition_id]["id"] = agent_id
+                    agents_data[agent_id][competition_id]["competition_id"] = competition_id
+                    agents_data[agent_id][competition_id]["url"] = 'http://localhost:38400/' + agent_id
+                    del competition["agents"][random_player]
+                    print("rand_num deleted", random_player)
+
     print("agent_data", agent_id, agents_data[agent_id].keys())
     @socketio.on('bidder_join')
     def receive_bidder_join(msg):
