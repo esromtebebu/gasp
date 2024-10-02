@@ -187,6 +187,7 @@ def active_auction(competition_id):
                 # return redirect(url_for('final_results'))
             else:
                 next_competition = False
+                def_results = {}
                 socketio.emit('redirect', {'url': url_for('final_results')})
         return {'response': 'received'}
     return render_template('active_auction.html', 
