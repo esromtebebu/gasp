@@ -2,14 +2,14 @@
     {
         "competition_id": "saa",
         "title": "La Lune et la planète joviane : enchère à l'anglaise",
-        "description": "lorem ipsum",
+        "description": "Dans une enchère à l'anglaise, les prix vont augmenter par un montant fixe, dans ce cas par 10 €. \n L'enchérisseur qui emporte payera le deuxième montant le plus élevé (par exemple s'il a gagné avec une offre de 70 €, il va effectivement payer 60 €).",
         "starts": "2021-10-25T18:25:43.511Z",
         "response_clock": 30,
         "agents": [
             {
-                "id": "agent1",
+                "id": "rationalbot",
                 "agent_type": "artificial_risk_averse",
-                "url": "http://localhost:8000/agent1",
+                "url": "http://localhost:8000/rationalbot",
                 "utility": 0,
                 "rationality": 0,
                 "valuation": {
@@ -20,13 +20,13 @@
                     "child_nodes": [
                         {
                             "node": "leaf",
-                            "value": 60,
+                            "value": 50,
                             "units": 1,
                             "good": "Lune"
                         },
                         {
                             "node": "leaf",
-                            "value": 40,
+                            "value": 50,
                             "units": 1,
                             "good": "Pluto"
                         }
@@ -36,45 +36,13 @@
                     "Lune": 0,
                     "Pluto": 0
                 },
-                "budget": 50
-            },
-            {
-                "id": "agent2",
-                "agent_type": "artificial_internal_based_strategy",
-                "url": "http://localhost:8000/agent2",
-                "utility": 0,
-                "rationality": 0,
-                "valuation": {
-                    "node": "ic",
-                    "value": 0,
-                    "min": 0,
-                    "max": 2,
-                    "child_nodes": [
-                        {
-                            "node": "leaf",
-                            "value": 40,
-                            "units": 1,
-                            "good": "Lune"
-                        },
-                        {
-                            "node": "leaf",
-                            "value": 60,
-                            "units": 1,
-                            "good": "Pluto"
-                        }
-                    ]
-                },
-                "allocation": {
-                    "Lune": 0,
-                    "Pluto": 0
-                },
-                "budget": 50
+                "budget": 100
             }
         ],
         "bid_clock": 30,
         "mechanism": "SAA",
         "start_price": 30,
-        "increment": 5,
+        "increment": 10,
         "auction_type": "single",
         "goods": [
             {"good_name": "Lune",
@@ -86,14 +54,14 @@
     {
         "competition_id": "sda",
         "title": "Les planètes gazeuses : enchère à l'hollandaise",
-        "description": "lorem ipsum",
+        "description": "Dans une enchère à l'hollandaise, les prix vont diminuer par un montant fixe, dans ce cas par 5 €. \n L'enchérisseur qui emporte payera le prix avec lequel il a fait une offre (par exemple s'il a gagné avec une offre de 70 €, il va payer 70 €).",
         "starts": "2021-10-25T18:25:43.511Z",
         "response_clock": 30,
         "agents": [
             {
-                "id": "agent1",
+                "id": "rationalbot",
                 "agent_type": "artificial_risk_averse",
-                "url": "http://localhost:8000/agent1",
+                "url": "http://localhost:8000/rationalbot",
                 "utility": 0,
                 "rationality": 0,
                 "valuation": {
@@ -104,25 +72,25 @@
                     "child_nodes": [
                         {
                             "node": "leaf",
-                            "value": 8,
+                            "value": 25,
                             "units": 1,
                             "good": "Jupiter"
                         },
                         {
                             "node": "leaf",
-                            "value": 20,
+                            "value": 25,
                             "units": 1,
                             "good": "Saturne"
                         },
                         {
                             "node": "leaf",
-                            "value": 44,
+                            "value": 25,
                             "units": 1,
                             "good": "Uranus"
                         },
                         {
                             "node": "leaf",
-                            "value": 38,
+                            "value": 25,
                             "units": 1,
                             "good": "Neptune"
                         }
@@ -134,58 +102,12 @@
                     "Uranus": 0,        
                     "Neptune": 0
                 },
-                "budget": 100
-            },
-            {
-                "id": "agent2",
-                "agent_type": "artificial_internal_based_strategy",
-                "url": "http://localhost:8000/agent2",
-                "utility": 0,
-                "rationality": 0,
-                "valuation": {
-                    "node": "ic",
-                    "value": 0,
-                    "min": 0,
-                    "max": 4,
-                    "child_nodes": [
-                        {
-                            "node": "leaf",
-                            "value": 20,
-                            "units": 1,
-                            "good": "Jupiter"
-                        },
-                        {
-                            "node": "leaf",
-                            "value": 27,
-                            "units": 1,
-                            "good": "Saturne"
-                        },
-                        {
-                            "node": "leaf",
-                            "value": 39,
-                            "units": 1,
-                            "good": "Uranus"
-                        },
-                        {
-                            "node": "leaf",
-                            "value": 31,
-                            "units": 1,
-                            "good": "Neptune"
-                        }
-                    ]
-                },
-                "allocation": {
-                    "Jupiter": 0,
-                    "Saturne": 0,
-                    "Uranus": 0,
-                    "Neptune": 0
-                },
-                "budget": 100
+                "budget": 50
             }
         ],
         "bid_clock": 30,
         "mechanism": "SDA",
-        "start_price": 50,
+        "start_price": 20,
         "increment": -5,
         "auction_type": "single",
         "goods": [
@@ -201,15 +123,15 @@
     },
     {
         "competition_id": "ssba2",
-        "title": "Les planètes rocheuses : enchère sous pli cacheté à premier prix avec paniers",
-        "description": "lorem ipsum",
+        "title": "Les planètes rocheuses : enchère sous pli cacheté à deuxième prix avec paniers",
+        "description": "Dans une enchère sous pli cacheté, les enchérisseurs vont déterminer la valeur du montant qu'il souhaitent offrir. \n L'emporteur payera la valeur de la deuxième offre la plus élevée.",
         "starts": "2021-10-25T18:25:43.511Z",
         "response_clock": 30,
         "agents": [
             {
-                "id": "agent1",
+                "id": "rationalbot",
                 "agent_type": "artificial_risk_averse",
-                "url": "http://localhost:8000/agent1",
+                "url": "http://localhost:8000/rationalbot",
                 "utility": 0,
                 "rationality": 0,
                 "valuation": {
@@ -220,43 +142,43 @@
                     "child_nodes": [
                         {
                             "node": "leaf",
-                            "value": 8,
+                            "value": 25,
                             "units": 1,
                             "good": "Mercure"
                         },
                         {
                             "node": "leaf",
-                            "value": 20,
+                            "value": 25,
                             "units": 1,
                             "good": "Vénus"
                         },
                         {
                             "node": "leaf",
-                            "value": 44,
+                            "value": 25,
                             "units": 1,
                             "good": "Terre"
                         },
                         {
                             "node": "leaf",
-                            "value": 38,
+                            "value": 25,
                             "units": 1,
                             "good": "Mars"
                         },
                         {
                             "node": "ic",
-                            "value": 10,
+                            "value": 0,
                             "min": 2,
                             "max": 2,
                             "child_nodes": [
                                 {
                                     "node": "leaf",
-                                    "value": 44,
+                                    "value": 25,
                                     "units": 1,
                                     "good": "Terre"
                                 },
                                 {
                                     "node": "leaf",
-                                    "value": 38,
+                                    "value": 25,
                                     "units": 1,
                                     "good": "Mars"
                                 }
@@ -264,19 +186,19 @@
                         },
                         {
                             "node": "ic",
-                            "value": 10,
+                            "value": 0,
                             "min": 2,
                             "max": 2,
                             "child_nodes": [
                                 {
                                     "node": "leaf",
-                                    "value": 8,
+                                    "value": 25,
                                     "units": 1,
                                     "good": "Vénus"
                                 },
                                 {
                                     "node": "leaf",
-                                    "value": 20,
+                                    "value": 25,
                                     "units": 1,
                                     "good": "Mercure"
                                 }
@@ -288,92 +210,6 @@
                     "Mercure": 0,
                     "Vénus": 0,
                     "Terre": 0,        
-                    "Mars": 0
-                },
-                "budget": 100
-            },
-            {
-                "id": "agent2",
-                "agent_type": "artificial_internal_based_strategy",
-                "url": "http://localhost:8000/agent2",
-                "utility": 0,
-                "rationality": 0,
-                "valuation": {
-                    "node": "ic",
-                    "value": 0,
-                    "min": 0,
-                    "max": 4,
-                    "child_nodes": [
-                        {
-                            "node": "leaf",
-                            "value": 20,
-                            "units": 1,
-                            "good": "Mercure"
-                        },
-                        {
-                            "node": "leaf",
-                            "value": 27,
-                            "units": 1,
-                            "good": "Vénus"
-                        },
-                        {
-                            "node": "leaf",
-                            "value": 39,
-                            "units": 1,
-                            "good": "Terre"
-                        },
-                        {
-                            "node": "leaf",
-                            "value": 31,
-                            "units": 1,
-                            "good": "Mars"
-                        },
-                        {
-                            "node": "ic",
-                            "value": 10,
-                            "min": 2,
-                            "max": 2,
-                            "child_nodes": [
-                                {
-                                    "node": "leaf",
-                                    "value": 20,
-                                    "units": 1,
-                                    "good": "Mercure"
-                                },
-                                {
-                                    "node": "leaf",
-                                    "value": 27,
-                                    "units": 1,
-                                    "good": "Vénus"
-                                }
-                            ]
-                        },
-                        {
-                            "node": "ic",
-                            "value": 10,
-                            "min": 2,
-                            "max": 2,
-                            "child_nodes": [
-                                {
-                                    "node": "leaf",
-                                    "value": 39,
-                                    "units": 1,
-                                    "good": "Terre"
-                                },
-                                {
-                                    "node": "leaf",
-                                    "value": 31,
-                                    "units": 1,
-                                    "good": "Mars"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                "allocation": {
-                    "Mercure": 0,
-                    "Vénus": 0,
-                    "Terre": 0,
                     "Mars": 0
                 },
                 "budget": 100

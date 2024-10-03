@@ -75,13 +75,18 @@ class SSBAuction2(Auction):
                     self.payments[winner] += max(self.bids[j], key = lambda x: x[1])[1]
                 else:
                     highest_price = max(self.bids[j], key=lambda x: x[1])[1]
-                    second_highest_price = max([x for x in self.bids[j] if x[1] != highest_price], key=lambda x: x[1])[1]
-                    if second_highest_price > 0:
-                        self.sold_prices[j] = second_highest_price
-                        self.payments[winner] += self.sold_prices[j]
+                    bids_left = [x for x in self.bids[j] if x[1] != highest_price]
+                    if bids_left:
+                        second_highest_price = max([x for x in self.bids[j] if x[1] != highest_price], key=lambda x: x[1])[1]
+                        if second_highest_price > 0:
+                            self.sold_prices[j] = second_highest_price
+                            self.payments[winner] += self.sold_prices[j]
+                        else:
+                            self.sold_prices[j] = max(self.bids[j], key = lambda x: x[1])[1]
+                            self.payments[winner] += max(self.bids[j], key = lambda x: x[1])[1]
                     else:
-                        self.sold_prices[j] = max(self.bids[j], key = lambda x: x[1])[1]
-                        self.payments[winner] += max(self.bids[j], key = lambda x: x[1])[1]
+                        self.sold_prices[j] = highest_price
+                        self.payments[winner] += highest_price
         self.bids[j] = set()
         self.terminated = True
     
