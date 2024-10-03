@@ -8,9 +8,11 @@
     </form>
 </div> -->
 <div class="container">
-    <h1 class="h3 mb-3 fw-normal">Veuillez prendre connaissances des compétitions auxquelles vous allez participer :</h1>
-</div>
-<div class="container">
+    <p class="lead text-center">Rappels des règles générales :</p>
+    <ul>
+        <li>Vous pouvez faire une offre supérieur à votre budget.</li>
+        <li>Durant le déroulement de l'enchère, vous pouvez consultez à tout moment votre budget, achats et valuations</li>
+    </ul>
     <!-- Modal -->
     <!-- {% for competition_id in agent_data[agent_id] %}
         <div class="list-group w-100">
@@ -38,7 +40,7 @@
     {% endfor %} -->
     <div class="container form-signin w-50 m-auto">
       <!-- Button trigger modal -->
-      {% for competition_id in agent_data[agent_id] %}
+      <!-- {% for competition_id in agent_data[agent_id] %}
         <div class="list-group w-100">
             <button type="button" class="btn btn-primary w-100 py-2" data-bs-toggle="modal" data-bs-target="#modal-{{competition_id}}">
                 Découvrer vos valuations privées pour {{competition_id}}
@@ -61,11 +63,13 @@
                 </div>
             </div>
         </div>
-    {% endfor %}
+    {% endfor %} -->
+    
         <form id="bidder-form" method="POST">
             <button class="btn btn-secondary w-100 py-2" type="submit">Valider</button>
         </form>
     </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
 <script type="text/javascript">
