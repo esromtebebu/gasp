@@ -495,15 +495,15 @@ def truthful_bidder(agent_id):
             paid[agent_id] = 0
             final_budget = budgets[agent_id]
             existing_allocation[agent_id] = {}
+            for agent in competition_data["agents"]:
+                if agent["id"] == agent_id:
+                    existing_allocation[agent_id] = agent["allocation"]
             if agent_id in payments.keys():
                 paid[agent_id] = payments[agent_id]
                 final_budget = budgets[agent_id] - paid[agent_id]
                 req = urllib.request.Request(f'{AUCTION_SERV_URL}/{competition_id}', method='GET')
                 res = urllib.request.urlopen(req)
                 competition_data = json.loads(res.read().decode('utf-8'))
-                for agent in competition_data["agents"]:
-                    if agent["id"] == agent_id:
-                        existing_allocation[agent_id] = agent["allocation"]
                 for good in new_allocation[agent_id]:
                     existing_allocation[agent_id][good] = new_allocation[agent_id][good]
             t = Thread(target=update_manager, args=(agent_id, trades, sold_prices, rationality, 'http://localhost:9000/final-results', final_budget, existing_allocation))

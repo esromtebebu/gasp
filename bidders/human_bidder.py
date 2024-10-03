@@ -224,30 +224,23 @@ def bidder(agent_id):
         htmldoc = res.read().decode('utf-8')
         competition_data[competition["competition_id"]] = json.loads(htmldoc)
     for competition_id in competition_data:
-        if players:
-            for competition in players:
-                if competition_data[competition_id]["title"] == competition["title"] and len(competition["agents"]) > 0 and agent_id != "favicon.ico":
-                    random_player = random.randint(0, len(competition["agents"]) - 1)
-                    agents_data[agent_id][competition_id] = {}
-                    agents_data[agent_id][competition_id] = competition["agents"][random_player]
-                    agents_data[agent_id][competition_id]["id"] = agent_id
-                    agents_data[agent_id][competition_id]["competition_id"] = competition_id
-                    agents_data[agent_id][competition_id]["url"] = 'http://localhost:38400/' + agent_id
-                    del competition["agents"][random_player]
-                    print("rand_num deleted", random_player)
-        else:
-            with open('bidders/players.json') as players_data:
-                players = json.load(players_data)
-            for competition in players:
-                if competition_data[competition_id]["title"] == competition["title"] and len(competition["agents"]) > 0 and agent_id != "favicon.ico":
-                    random_player = random.randint(0, len(competition["agents"]) - 1)
-                    agents_data[agent_id][competition_id] = {}
-                    agents_data[agent_id][competition_id] = competition["agents"][random_player]
-                    agents_data[agent_id][competition_id]["id"] = agent_id
-                    agents_data[agent_id][competition_id]["competition_id"] = competition_id
-                    agents_data[agent_id][competition_id]["url"] = 'http://localhost:38400/' + agent_id
-                    del competition["agents"][random_player]
-                    print("rand_num deleted", random_player)
+        for competition in players:
+            if (competition_data[competition_id]["title"] == competition["title"] 
+            and len(competition["agents"]) > 0 
+            and agent_id != "favicon.ico"):
+            # and [competition["agents"][i]["valuations"] not in competition_data[competition_id]["agents"][j]["valuations"] for i,j in zip(competition["agents"], competition_data[competition_id]["agents"])]):
+                for i in competition["agents"]:
+                    if not any(j["valuation"] == i["valuation"] and j["agent_type"] == "human" 
+                        for j in competition_data[competition_id]["agents"]):
+                        print(f"Human agent with different valuation found")
+                        agents_data[agent_id][competition_id] = {}
+                        agents_data[agent_id][competition_id] = i
+                        agents_data[agent_id][competition_id]["id"] = agent_id
+                        agents_data[agent_id][competition_id]["competition_id"] = competition_id
+                        agents_data[agent_id][competition_id]["url"] = 'http://localhost:38400/' + agent_id
+                    else:
+                        print(f"Human agent with different valuation not found")
+                # del competition["agents"][random_player]
 
     print("agent_data", agent_id, agents_data[agent_id].keys())
     @socketio.on('bidder_join')
@@ -330,7 +323,6 @@ def truthful_bidder(agent_id):
             if message['message_type'] == 'stop':
                 stop_message[agent_id] = message
                 state[agent_id] = 'stop'
-                socketio.emit('reload', 'new message')
                 log('stop message received', agent_id)
                 log('{\n\t'
                     + '\n\t'.join(f'{key}: {value}' for key, value in message.items())
@@ -350,6 +342,8 @@ def truthful_bidder(agent_id):
                             new_allocation[agent_id] = {}
                             for good in joint_allocation[agent_id]:
                                 new_allocation[agent_id][good] = joint_allocation[agent_id][good]
+                                if good not in acquired_goods[agent_id]:
+                                    acquired_goods[agent_id].append(good)
                         if competition['competition_id'] != competition_id:
                             paid[agent_id] = 0
                             existing_allocation[agent_id] = {}
@@ -366,6 +360,8 @@ def truthful_bidder(agent_id):
                                     existing_allocation[agent_id][good] = new_allocation[agent_id][good]
                                 t = Thread(target=update_agent_data, args=(final_budget, competition["competition_id"], agent_id, existing_allocation, trades, sold_prices, rationality, auction_type, 'False'))
                                 t.start() 
+                        
+                    socketio.emit('reload', 'new message')
                 else:
                     payments = json.loads(message['auction_state'])['joint_payment']
                     joint_allocation = json.loads(message['auction_state'])['joint_allocation']
@@ -431,15 +427,15 @@ def truthful_bidder(agent_id):
                     paid[agent_id] = 0
                     final_budget = budgets[agent_id]
                     existing_allocation[agent_id] = {}
+                    for agent in competition_data["agents"]:
+                        if agent["id"] == agent_id:
+                            existing_allocation[agent_id] = agent["allocation"]
                     if agent_id in payments.keys():
                         paid[agent_id] = payments[agent_id]
                         final_budget = budgets[agent_id] - paid[agent_id]
                         req = urllib.request.Request(f'{AUCTION_SERV_URL}/{competition_id}', method='GET')
                         res = urllib.request.urlopen(req)
                         competition_data = json.loads(res.read().decode('utf-8'))
-                        for agent in competition_data["agents"]:
-                            if agent["id"] == agent_id:
-                                existing_allocation[agent_id] = agent["allocation"]
                         for good in new_allocation[agent_id]:
                             existing_allocation[agent_id][good] = new_allocation[agent_id][good]
                     t = Thread(target=update_manager, args=(agent_id, trades, sold_prices, rationality, 'http://localhost:9000/final-results', final_budget, existing_allocation))
