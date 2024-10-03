@@ -39,7 +39,7 @@ class CreateAuctions(FlaskForm):
         Create single or sequential auctions.
     '''
     auction_type = SelectField("What type of auction do you want to create?",
-                               choices=[("sequential", "Sequential Auctions"), ("single", "Single Auctions")])
+                               choices=[("sequential", "Enchères séquentielles"), ("single", "Enchères indépendantes")])
     submit = SubmitField("Commencer")
 
 
