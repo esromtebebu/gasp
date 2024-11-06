@@ -161,7 +161,7 @@ $ flask run
 A new sample auction can be created using the `auction_starter.py` script:
 
 ```console
-$ tools/auction_starter.py tools/saa_auction.json
+$ gunicorn -k eventlet tools.auction_manager:app --bind localhost:9000
 ```
 
 When run, this script contacts the server and asks for the creation of a new competition, using the description contained in `tools/saa_auction.json`. The server answers with a message containing the URL of this competition.
@@ -174,29 +174,20 @@ GET http://localhost:5000/c3329eee-dda9-472c-8923-e8061a2581e6 HTTP/1.1
 
 (Of course, you will have to replace the UUID in the request above with your own UUID)
 
-Now if you want to test the full running of the newly created auction, you can use the provided truthful bidder implementation for Simultaneous Ascending Auctions. Assuming the server is still running, open a new terminal, and launch the script `bidders/saa_bidder.py`:
+Now if you want to test the full running of the newly created auction, you can use the provided truthful bidder implementation for Simultaneous Ascending Auctions. Assuming the server is still running, open a new terminal, and launch the script `gunicorn -k eventlet bidders.artificial_bidder:app --bind localhost:8080` for artificial bidders or `gunicorn -k eventlet bidders.human_bidder:app --bind localhost:38400`:
 
 ```console
-$ bidders/saa_bidder.py
+$ gunicorn -k eventlet bidders.artificial_bidder:app --bind localhost:8080
+$gunicorn -k eventlet bidders.human_bidder:app --bind localhost:38400
 ```
 
 A message stating that the server is running should be printed (NB: yes, the bidders are also implemented as web servers, for they must be able to respond to the auction server requests).
 
-Then, start the auction sending the following HTTP request:
-
-```http
-GET http://localhost:5000/c3329eee-dda9-472c-8923-e8061a2581e6/start HTTP/1.1
-```
+Then, start the auction sending filling the form in http://localhost:9000.
 
 The auction server should answer with a message stating that the competition is started. Then, the auction server and the bidders interact automatically until the auction terminates.
 
 The `bidders` module also contains a comprehensive test script that aims at fully testing the protocol running simultaneous ascending auctions. Concretely, this script runs $n$ tests (by default, $n=10$) in a row. For each test, it creates a new competition with random parameters, starts it, and simulates truthful bidders until the auction terminates. When the auction terminates, the test program computes the expected auction result, and compares it with the result provided with the server. They should match.
-
-If you want to run the test program, just type:
-
-```console
-$ bidders/test_saa.py
-```
 
 ## GASP Exchange Protocol
 
@@ -504,5 +495,6 @@ At any moment, if there is a problem, the auction server can send a message of t
 ```
 
 It may happen for instance if one of the bidders is completely unreachable.
-# a g a p e  
+# a g a p e 
+ 
  # agape
