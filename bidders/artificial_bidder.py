@@ -47,12 +47,11 @@ def compute_valuations(valuations, still_to_sell): #still_to_sell -> goods?
 
     for good in still_to_sell:
         leafy_utility[good] = 0
-    print("Valuations", valuations)
     for node in valuations['child_nodes']:
         if node['node'] == 'leaf' and node['good'] in still_to_sell:
             leafy_utility[node['good']] += node['value']
             bounds += ((0, node['units']), )
-        elif node['node'] == 'leaf' and node['good'] in still_to_sell:
+        elif node['node'] == 'ic':
             bundles.append([child_node['good'] for child_node in node['child_nodes']])
             ic_utility[len(bundles) - 1] = node['value']
     return leafy_utility, ic_utility, bundles, bounds
@@ -96,8 +95,7 @@ def sea_optimize_internal_based_strategy(leafy_utility, ic_utility, bundles, pri
   bounds_constraint = []
   for leaf in leafy_utility:
     if leaf in still_to_sell:
-        p.append(price - leafy_utility[leaf])
-        c.append(price)
+        p.append(-leafy_utility[leaf])
         bounds_constraint.append(bounds[list(leafy_utility.keys()).index(leaf)])
   for bundle in bundles:
     if all((good in acquired_goods) or (good in still_to_sell) or (good in forthcoming_goods) for good in bundle):
@@ -105,13 +103,15 @@ def sea_optimize_internal_based_strategy(leafy_utility, ic_utility, bundles, pri
         if good in still_to_sell:
           p[still_to_sell.index(good)] -= ic_utility[bundles.index(bundle)]/(len(bundle))
   b_ub = np.array([budget])
-  result = linprog(c=p, A_ub=np.array([c]), b_ub=b_ub, bounds=bounds_constraint, method='highs')
+  result = linprog(c=p, A_ub=np.array([p]), b_ub=b_ub, bounds=bounds_constraint, method='highs')
   print(result.x)
   decision = []
   for good in still_to_sell:
     # if still_to_sell is not None and good in still_to_sell:
-    if result.x is not None and result.x[still_to_sell.index(good)] >= 1:
-        decision.append(good)
+    if result.x is not None:
+        if result.x[still_to_sell.index(good)]*p[still_to_sell.index(good)]*-1 >= price:
+            print(result.x[still_to_sell.index(good)]*p[still_to_sell.index(good)]*-1, good)
+            decision.append(good)
   return decision
 
 def ssba_optimize_risk_averse(leafy_utility, ic_utility, bundles, bounds, budget, still_to_sell, acquired_goods):
@@ -169,10 +169,12 @@ def compute_utility(trades, sold_prices, agent_id):
     leafy_utility, ic_utility, bundles, bounds = compute_valuations(valuations[agent_id], goods)
     for good in trades[agent_id]:
       utility[agent_id] += leafy_utility[good]
-      for bundle in bundles:
-        if good in bundle and all((good in joint_allocation[agent_id]) for good in bundle if joint_allocation[agent_id][good] != 0):
-          utility[agent_id] += ic_utility[bundles.index(bundle)]/len(bundle)
       utility[agent_id] -= sold_prices[goods.index(good)]
+
+    for bundle in bundles:
+        # if good in bundle and all((good in joint_allocation[agent_id]) for good in bundle if joint_allocation[agent_id][good] != 0):
+        if any(good in bundle for good in trades[agent_id]) and all(joint_allocation[agent_id].get(g, 0) > 0 for g in bundle):
+            utility[agent_id] += ic_utility[bundles.index(bundle)]
     return utility[agent_id]
 
 def send_bid(agent_id, competition_id, still_to_bid):
@@ -272,7 +274,7 @@ def truthful_bidder(agent_id):
         print("/////////Budget", budgets, payments, paid)
         for bundle in bundles:
             for good in bundle:
-              if good in still_to_sell[agent_id] and good not in still_to_sell and good not in allocation[agent_id]:
+              if good in acquired_goods[agent_id] and good not in still_to_sell and good not in allocation[agent_id]:
                 forthcoming_goods[agent_id].append(good)
         if mechanism == 'SAA' or mechanism == 'SDA':
             if agent_type[agent_id] == "artificial_risk_averse":
@@ -495,15 +497,15 @@ def truthful_bidder(agent_id):
             paid[agent_id] = 0
             final_budget = budgets[agent_id]
             existing_allocation[agent_id] = {}
-            for agent in competition_data["agents"]:
-                if agent["id"] == agent_id:
-                    existing_allocation[agent_id] = agent["allocation"]
             if agent_id in payments.keys():
                 paid[agent_id] = payments[agent_id]
                 final_budget = budgets[agent_id] - paid[agent_id]
                 req = urllib.request.Request(f'{AUCTION_SERV_URL}/{competition_id}', method='GET')
                 res = urllib.request.urlopen(req)
                 competition_data = json.loads(res.read().decode('utf-8'))
+                for agent in competition_data["agents"]:
+                    if agent["id"] == agent_id:
+                        existing_allocation[agent_id] = agent["allocation"]
                 for good in new_allocation[agent_id]:
                     existing_allocation[agent_id][good] = new_allocation[agent_id][good]
             t = Thread(target=update_manager, args=(agent_id, trades, sold_prices, rationality, 'http://localhost:9000/final-results', final_budget, existing_allocation))

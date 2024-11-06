@@ -64,7 +64,7 @@ def log(msg, agent_id):
     with lock:
         sys.stdout.write(f'Bidder {agent_id} > {msg}\n')
 
-def compute_valuations(valuation, still_to_sell): #still_to_sell -> goods?
+def compute_valuations(valuations, still_to_sell): #still_to_sell -> goods?
     leafy_utility = {}
     ic_utility = {}
     bundles = []
@@ -72,12 +72,11 @@ def compute_valuations(valuation, still_to_sell): #still_to_sell -> goods?
 
     for good in still_to_sell:
         leafy_utility[good] = 0
-
-    for node in valuation['child_nodes']:
+    for node in valuations['child_nodes']:
         if node['node'] == 'leaf' and node['good'] in still_to_sell:
             leafy_utility[node['good']] += node['value']
             bounds += ((0, node['units']), )
-        elif node['node'] == 'leaf' and node['good'] in still_to_sell:
+        elif node['node'] == 'ic':
             bundles.append([child_node['good'] for child_node in node['child_nodes']])
             ic_utility[len(bundles) - 1] = node['value']
     return leafy_utility, ic_utility, bundles, bounds
@@ -128,10 +127,12 @@ def compute_utility(trades, sold_prices, agent_id):
     leafy_utility, ic_utility, bundles, bounds = compute_valuations(valuations[agent_id], goods)
     for good in trades[agent_id]:
       utility[agent_id] += leafy_utility[good]
-      for bundle in bundles:
-        if good in bundle and all((good in joint_allocation[agent_id]) for good in bundle if joint_allocation[agent_id][good] != 0):
-          utility[agent_id] += ic_utility[bundles.index(bundle)]/len(bundle)
       utility[agent_id] -= sold_prices[goods.index(good)]
+
+    for bundle in bundles:
+        # if good in bundle and all((good in joint_allocation[agent_id]) for good in bundle if joint_allocation[agent_id][good] != 0):
+        if any(good in bundle for good in trades[agent_id]) and all(joint_allocation[agent_id].get(g, 0) > 0 for g in bundle):
+            utility[agent_id] += ic_utility[bundles.index(bundle)]
     return utility[agent_id]
 
 
@@ -427,15 +428,15 @@ def truthful_bidder(agent_id):
                     paid[agent_id] = 0
                     final_budget = budgets[agent_id]
                     existing_allocation[agent_id] = {}
-                    for agent in competition_data["agents"]:
-                        if agent["id"] == agent_id:
-                            existing_allocation[agent_id] = agent["allocation"]
                     if agent_id in payments.keys():
                         paid[agent_id] = payments[agent_id]
                         final_budget = budgets[agent_id] - paid[agent_id]
                         req = urllib.request.Request(f'{AUCTION_SERV_URL}/{competition_id}', method='GET')
                         res = urllib.request.urlopen(req)
                         competition_data = json.loads(res.read().decode('utf-8'))
+                        for agent in competition_data["agents"]:
+                            if agent["id"] == agent_id:
+                                existing_allocation[agent_id] = agent["allocation"]
                         for good in new_allocation[agent_id]:
                             existing_allocation[agent_id][good] = new_allocation[agent_id][good]
                     t = Thread(target=update_manager, args=(agent_id, trades, sold_prices, rationality, 'http://localhost:9000/final-results', final_budget, existing_allocation))
@@ -495,7 +496,7 @@ def receive_bid_msg(msg):
     forthcoming_goods[agent_id] = []
     for bundle in bundles:
         for good in bundle:
-            if good not in acquired_goods and good not in still_to_sell and good not in allocations[agent_id]:
+            if good not in acquired_goods[agent_id] and good not in still_to_sell and good not in allocations[agent_id]:
                 forthcoming_goods[agent_id].append(good)
     if mechanism == 'SAA' or mechanism == 'SDA':
         rational_bid = sea_optimize_internal_based_strategy(leafy_utility, ic_utility, bundles, auction_state["price"], bounds, budgets[agent_id] - paid[agent_id], still_to_sell, acquired_goods[agent_id], forthcoming_goods[agent_id])

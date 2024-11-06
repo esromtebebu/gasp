@@ -324,7 +324,7 @@
                         },
                         {
                             "node": "ic",
-                            "value": 10,
+                            "value": 20,
                             "min": 2,
                             "max": 2,
                             "child_nodes": [

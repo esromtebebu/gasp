@@ -8,7 +8,7 @@
         "agents": [
             {
                 "id": "rationalbot",
-                "agent_type": "artificial_risk_averse",
+                "agent_type": "artificial_internal_based_strategy",
                 "url": "http://localhost:8000/rationalbot",
                 "utility": 0,
                 "rationality": 0,
@@ -60,7 +60,7 @@
         "agents": [
             {
                 "id": "rationalbot",
-                "agent_type": "artificial_risk_averse",
+                "agent_type": "artificial_internal_based_strategy",
                 "url": "http://localhost:8000/rationalbot",
                 "utility": 0,
                 "rationality": 0,
@@ -130,7 +130,7 @@
         "agents": [
             {
                 "id": "rationalbot",
-                "agent_type": "artificial_risk_averse",
+                "agent_type": "artificial_internal_based_strategy",
                 "url": "http://localhost:8000/rationalbot",
                 "utility": 0,
                 "rationality": 0,
